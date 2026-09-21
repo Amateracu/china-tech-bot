@@ -58,11 +58,28 @@ def _card_footer(entry, status):
     return truncate(body, limit)
 
 
+def _ack(callback_id, text=""):
+    """Всплывающий ответ на нажатие — необязательный.
+
+    Telegram принимает ответ на callback только первые ~15 минут. Мы просыпаемся
+    по расписанию и часто опаздываем, поэтому неудача здесь не должна мешать
+    применить само решение.
+    """
+    try:
+        answer_callback(callback_id, text)
+    except RuntimeError as exc:
+        log(f"  (ответить на нажатие не вышло: {str(exc)[:70]})")
+
+
 def _edit(entry, chat_id, message_id, text, reply_markup=None):
-    """У сообщения с фото правится подпись, у обычного — текст."""
-    if entry.get("mod_is_photo"):
-        return edit_caption(chat_id, message_id, text, reply_markup=reply_markup)
-    return edit_message(chat_id, message_id, text, reply_markup=reply_markup)
+    """У сообщения с фото правится подпись, у обычного — текст. Тоже необязательно."""
+    try:
+        if entry.get("mod_is_photo"):
+            return edit_caption(chat_id, message_id, text, reply_markup=reply_markup)
+        return edit_message(chat_id, message_id, text, reply_markup=reply_markup)
+    except RuntimeError as exc:
+        log(f"  (обновить карточку не вышло: {str(exc)[:70]})")
+        return None
 
 
 def handle_callback(cb, queue, approved):
@@ -74,13 +91,13 @@ def handle_callback(cb, queue, approved):
 
     entry = _find(queue, item_id)
     if entry is None:
-        answer_callback(cb["id"], "Эта новость уже обработана")
+        _ack(cb["id"], "Эта новость уже обработана")
         return
 
     if action == "q":
         _drop(queue, item_id)
         approved["items"].append(entry)
-        answer_callback(cb["id"], "В очереди на публикацию")
+        _ack(cb["id"], "В очереди на публикацию")
         _edit(entry, chat_id, message_id, _card_footer(entry, "✅ в очереди"),
               reply_markup={"inline_keyboard": []})
         log(f"  ✅ в очередь: {entry.get('title', '')[:60]}")
@@ -90,20 +107,20 @@ def handle_callback(cb, queue, approved):
         try:
             publish_now(entry)
         except RuntimeError as exc:
-            answer_callback(cb["id"], "Ошибка публикации")
+            _ack(cb["id"], "Ошибка публикации")
             _edit(entry, chat_id, message_id,
                   _card_footer(entry, f"⚠️ ошибка: {esc(str(exc))[:60]}"))
             return
-        answer_callback(cb["id"], "Опубликовано")
+        _ack(cb["id"], "Опубликовано")
         _edit(entry, chat_id, message_id, _card_footer(entry, "⚡ опубликовано"),
               reply_markup={"inline_keyboard": []})
         log(f"  ⚡ опубликовано: {entry.get('title', '')[:60]}")
 
     elif action == "r":
         if entry.get("rewrites", 0) >= MAX_REWRITES:
-            answer_callback(cb["id"], "Лимит переписываний исчерпан")
+            _ack(cb["id"], "Лимит переписываний исчерпан")
             return
-        answer_callback(cb["id"], "Переписываю…")
+        _ack(cb["id"], "Переписываю…")
         try:
             fresh = write_post(_Item(entry), variant_hint=REWRITE_HINT, temperature=0.9)
         except RuntimeError as exc:
@@ -122,13 +139,13 @@ def handle_callback(cb, queue, approved):
 
     elif action == "d":
         _drop(queue, item_id)
-        answer_callback(cb["id"], "Удалено")
+        _ack(cb["id"], "Удалено")
         _edit(entry, chat_id, message_id, _card_footer(entry, "🗑 удалено"),
               reply_markup={"inline_keyboard": []})
         log(f"  🗑 удалено: {entry.get('title', '')[:60]}")
 
     else:
-        answer_callback(cb["id"], "Неизвестная команда")
+        _ack(cb["id"], "Неизвестная команда")
 
 
 def handle_message(msg, queue, approved):

@@ -296,6 +296,55 @@ class TestTelegramParams(unittest.TestCase):
             self.assertGreater(kw["timeout"], 0)
 
 
+class TestModerationRobustness(unittest.TestCase):
+    """Регрессия: просроченный ответ на нажатие не должен отменять само решение.
+
+    Telegram принимает answerCallbackQuery только ~15 минут. Воркер просыпается
+    по расписанию и часто опаздывает — решение всё равно обязано примениться.
+    """
+
+    def _entry(self, item_id="abc123"):
+        return {"id": item_id, "title": "Заголовок", "text": "Текст поста",
+                "url": "https://e.com/1", "source_name": "TechNode",
+                "mod_is_photo": False, "rewrites": 0}
+
+    def _cb(self, action, item_id="abc123"):
+        return {"id": "cb1", "data": f"{action}:{item_id}",
+                "message": {"message_id": 7, "chat": {"id": 42}}}
+
+    def test_expired_ack_still_moves_to_approved(self):
+        from bot import moderate
+        queue = {"items": [self._entry()]}
+        approved = {"items": []}
+        expired = RuntimeError(
+            "Telegram answerCallbackQuery -> Bad Request: query is too old")
+        with mock.patch("bot.moderate.answer_callback", side_effect=expired),              mock.patch("bot.moderate.edit_message") as edit:
+            moderate.handle_callback(self._cb("q"), queue, approved)
+        self.assertEqual(len(queue["items"]), 0, "новость должна уйти из очереди")
+        self.assertEqual(len(approved["items"]), 1, "и попасть в одобренные")
+        edit.assert_called_once()
+
+    def test_failed_edit_does_not_abort(self):
+        from bot import moderate
+        queue = {"items": [self._entry()]}
+        approved = {"items": []}
+        with mock.patch("bot.moderate.answer_callback"),              mock.patch("bot.moderate.edit_message",
+                        side_effect=RuntimeError("message can't be edited")):
+            moderate.handle_callback(self._cb("q"), queue, approved)
+        self.assertEqual(len(approved["items"]), 1)
+
+    def test_delete_works_with_expired_ack(self):
+        from bot import moderate
+        queue = {"items": [self._entry()]}
+        approved = {"items": []}
+        with mock.patch("bot.moderate.answer_callback",
+                        side_effect=RuntimeError("query is too old")), \
+             mock.patch("bot.moderate.edit_message"):
+            moderate.handle_callback(self._cb("d"), queue, approved)
+        self.assertEqual(queue["items"], [])
+        self.assertEqual(approved["items"], [])
+
+
 class TestUtil(unittest.TestCase):
     def test_similarity(self):
         self.assertGreater(util.similarity("Huawei unveils 5nm chip",
