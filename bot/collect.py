@@ -5,12 +5,12 @@
 import sys
 from datetime import timedelta
 
-from . import store
+from . import media, store
 from .config import (MODERATOR_CHAT_ID, PIPELINE, SOURCES, DRY_RUN, require)
 from .llm import render, write_post
 from .relevance import prefilter
 from .sources import collect_all
-from .tg_api import keyboard, send_message
+from .tg_api import CAPTION_LIMIT, keyboard, send_message, send_photo
 from .util import esc, iso, now_utc, similarity, truncate
 
 
@@ -45,15 +45,18 @@ def _dedupe(items, seen_items, threshold: float):
     return out
 
 
-def _moderation_card(item, data, post_text) -> str:
-    matched = ", ".join(item.matched[:5]) or "—"
+MEDIA_LABEL = {"source": "фото источника", "card": "своя карточка", "": "без картинки"}
+
+
+def _moderation_card(item, data, post_text, media_kind="") -> str:
+    matched = ", ".join(item.matched[:4]) or "—"
     head = (
         f"<b>{esc(data['title'])}</b>\n"
-        f"<i>{esc(item.source_name)} · score {item.score} · оценка модели {data.get('score')}/10</i>\n"
-        f"<i>{esc(matched)}</i>\n"
+        f"<i>{esc(item.source_name)} · {data.get('score')}/10 · "
+        f"{MEDIA_LABEL.get(media_kind, '')} · {esc(matched)}</i>\n"
         f"{'─' * 18}\n"
     )
-    return head + truncate(post_text, 3400)
+    return head + post_text
 
 
 def main() -> int:
@@ -101,11 +104,23 @@ def main() -> int:
             continue
 
         post_text = render(data, item.url, item.source_name)
-        card = _moderation_card(item, data, post_text)
 
-        msg = send_message(
-            MODERATOR_CHAT_ID, card, reply_markup=keyboard(item.id), silent=True
+        image_url = media.pick_image_url(item)
+        blob, media_kind = media.resolve(
+            data["title"], image_url, item.url, item.source_name
         )
+        card = _moderation_card(item, data, post_text, media_kind)
+
+        as_photo = bool(blob) and len(card) <= CAPTION_LIMIT
+        if as_photo:
+            msg = send_photo(MODERATOR_CHAT_ID, blob, card,
+                             reply_markup=keyboard(item.id), silent=True)
+        else:
+            if blob:
+                card += "\n\n<i>Пост длиннее лимита подписи — уйдёт текстом.</i>"
+                media_kind = ""
+            msg = send_message(MODERATOR_CHAT_ID, truncate(card, 3400),
+                               reply_markup=keyboard(item.id), silent=True)
         queue["items"].append(
             {
                 "id": item.id,
@@ -118,6 +133,9 @@ def main() -> int:
                 "raw_title": item.title,
                 "raw_summary": item.summary,
                 "lang": item.lang,
+                "image_url": image_url,
+                "media_kind": media_kind,
+                "mod_is_photo": as_photo,
                 "message_id": msg.get("message_id"),
                 "created_at": iso(now_utc()),
                 "rewrites": 0,

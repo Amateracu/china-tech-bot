@@ -7,9 +7,9 @@
 import sys
 from datetime import timedelta
 
-from . import store
+from . import media, store
 from .config import CHANNEL_ID, DRY_RUN, PUBLISHING, require
-from .tg_api import send_message
+from .tg_api import CAPTION_LIMIT, send_message, send_photo
 from .util import iso, local_now, now_utc, parse_iso
 
 
@@ -18,10 +18,19 @@ def log(*args):
 
 
 def publish_now(post: dict) -> dict:
-    """Отправляет пост в канал и записывает его в published.json."""
-    msg = send_message(
-        CHANNEL_ID, post["text"], preview_url=post.get("url"), silent=False
-    )
+    """Отправляет пост в канал — с картинкой, если она есть и подпись влезает."""
+    blob = None
+    if post.get("media_kind"):
+        blob, _ = media.resolve(
+            post.get("title", ""), post.get("image_url", ""),
+            post.get("url", ""), post.get("source_name", ""),
+        )
+    if blob and len(post["text"]) <= CAPTION_LIMIT:
+        msg = send_photo(CHANNEL_ID, blob, post["text"], silent=False)
+    else:
+        msg = send_message(
+            CHANNEL_ID, post["text"], preview_url=post.get("url"), silent=False
+        )
     published = store.load("published.json")
     published["items"].append(
         {

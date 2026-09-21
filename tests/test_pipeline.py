@@ -3,6 +3,7 @@
 Запуск: python -m tests.test_pipeline
 Сеть и API не используются — всё на фикстурах.
 """
+import io
 import sys
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -18,11 +19,12 @@ from bot.sources.rss import fetch_rss               # noqa: E402
 
 NOW = datetime.now(timezone.utc)
 RSS = f"""<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0"><channel><title>Fixture</title>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel><title>Fixture</title>
 <item>
   <title>Huawei unveils new 5nm chip made by SMIC</title>
   <link>https://example.com/a?utm_source=rss&amp;id=1</link>
-  <description>&lt;p&gt;The Chinese company said the semiconductor is produced domestically.&lt;/p&gt;</description>
+  <description>&lt;p&gt;&lt;img src="https://cdn.example.com/chip.jpg"/&gt;The Chinese company said the semiconductor is produced domestically.&lt;/p&gt;</description>
+  <enclosure url="https://cdn.example.com/hero.jpg" type="image/jpeg" length="120000"/>
   <pubDate>{NOW.strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
 </item>
 <item>
@@ -82,6 +84,82 @@ class TestRss(unittest.TestCase):
         self.assertEqual(len(items), 1)
         self.assertEqual(items[0].url, "https://example.org/robot")
         self.assertEqual(items[0].published.year, 2026)
+
+
+class TestMedia(unittest.TestCase):
+    def setUp(self):
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(RSS)):
+            self.items = fetch_rss(SRC)
+
+    def test_enclosure_wins(self):
+        self.assertEqual(self.items[0].image, "https://cdn.example.com/hero.jpg")
+
+    def test_img_in_description_is_fallback(self):
+        # у второй новости enclosure нет — берём <img> из описания
+        self.assertEqual(self.items[1].image, "")
+
+    def test_media_content_tag(self):
+        feed = """<?xml version="1.0"?>
+        <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/"><channel>
+        <item><title>BYD ships new EV</title><link>https://e.com/1</link>
+        <media:content url="https://cdn.e.com/pic.jpg" type="image/jpeg"/>
+        </item></channel></rss>"""
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(feed)):
+            items = fetch_rss(SRC)
+        self.assertEqual(items[0].image, "https://cdn.e.com/pic.jpg")
+
+    def test_img_from_html_body(self):
+        feed = """<?xml version="1.0"?>
+        <rss version="2.0"><channel><item>
+        <title>Xiaomi chip news</title><link>https://e.com/2</link>
+        <description>&lt;img src="/local/pic.png"&gt; текст</description>
+        </item></channel></rss>"""
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(feed)):
+            items = fetch_rss(SRC)
+        self.assertEqual(items[0].image, "/local/pic.png")
+
+    def test_og_image_parsed_and_absolutised(self):
+        from bot import media
+        html = (b'<html><head><meta property="og:image" content="/img/hero.jpg">'
+                b'</head><body></body></html>')
+        resp = mock.MagicMock()
+        resp.headers = {"Content-Type": "text/html; charset=utf-8"}
+        resp.raise_for_status = lambda: None
+        resp.iter_content = lambda n: iter([html])
+        resp.__enter__ = lambda self_: resp
+        resp.__exit__ = lambda *a: False
+        with mock.patch("bot.media.requests.get", return_value=resp):
+            url = media.og_image("https://news.example.com/article/1")
+        self.assertEqual(url, "https://news.example.com/img/hero.jpg")
+
+    def test_logo_like_images_rejected(self):
+        from bot import media
+        item = Item(id="1", title="t", summary="", url="https://e.com/a",
+                    source_id="s", source_name="S")
+        item.image = "https://e.com/static/logo.png"
+        with mock.patch("bot.media.og_image", return_value="") as og:
+            self.assertEqual(media.pick_image_url(item), "")
+            og.assert_called_once()
+
+    def test_card_is_valid_jpeg(self):
+        from bot import media
+        blob = media.make_card("Huawei запустила производство 5-нм чипов", "TechNode")
+        self.assertTrue(blob.startswith(b"\xff\xd8"), "должен быть JPEG")
+        from PIL import Image
+        with Image.open(io.BytesIO(blob)) as im:
+            self.assertEqual(im.size, (media.CARD_W, media.CARD_H))
+
+    def test_tiny_images_rejected(self):
+        from bot import media
+        from PIL import Image
+        buf = io.BytesIO()
+        Image.new("RGB", (60, 60), (10, 10, 10)).save(buf, "JPEG")
+        resp = mock.Mock()
+        resp.headers = {"Content-Type": "image/jpeg"}
+        resp.raise_for_status = lambda: None
+        resp.iter_content = lambda n: iter([buf.getvalue()])
+        with mock.patch("bot.media.requests.get", return_value=resp):
+            self.assertIsNone(media.fetch_image("https://e.com/small.jpg"))
 
 
 class TestFilter(unittest.TestCase):

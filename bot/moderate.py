@@ -10,7 +10,8 @@ from . import store
 from .config import DRY_RUN, require
 from .llm import render, write_post
 from .publish import publish_now
-from .tg_api import answer_callback, edit_message, get_updates, keyboard, send_message
+from .tg_api import (CAPTION_LIMIT, answer_callback, edit_caption, edit_message,
+                     get_updates, keyboard, send_message)
 from .util import esc, now_utc, parse_iso, truncate
 
 REWRITE_HINT = (
@@ -48,11 +49,20 @@ def _drop(queue, item_id):
 
 
 def _card_footer(entry, status):
-    return (
+    body = (
         f"<b>{esc(entry.get('title', ''))}</b>\n"
         f"<i>{esc(entry.get('source_name', ''))} · {status}</i>\n"
-        f"{'─' * 18}\n" + truncate(entry.get("text", ""), 3400)
+        f"{'─' * 18}\n" + entry.get("text", "")
     )
+    limit = CAPTION_LIMIT if entry.get("mod_is_photo") else 3400
+    return truncate(body, limit)
+
+
+def _edit(entry, chat_id, message_id, text, reply_markup=None):
+    """У сообщения с фото правится подпись, у обычного — текст."""
+    if entry.get("mod_is_photo"):
+        return edit_caption(chat_id, message_id, text, reply_markup=reply_markup)
+    return edit_message(chat_id, message_id, text, reply_markup=reply_markup)
 
 
 def handle_callback(cb, queue, approved):
@@ -71,7 +81,8 @@ def handle_callback(cb, queue, approved):
         _drop(queue, item_id)
         approved["items"].append(entry)
         answer_callback(cb["id"], "В очереди на публикацию")
-        edit_message(chat_id, message_id, _card_footer(entry, "✅ в очереди"), reply_markup={"inline_keyboard": []})
+        _edit(entry, chat_id, message_id, _card_footer(entry, "✅ в очереди"),
+              reply_markup={"inline_keyboard": []})
         log(f"  ✅ в очередь: {entry.get('title', '')[:60]}")
 
     elif action == "n":
@@ -80,10 +91,12 @@ def handle_callback(cb, queue, approved):
             publish_now(entry)
         except RuntimeError as exc:
             answer_callback(cb["id"], "Ошибка публикации")
-            edit_message(chat_id, message_id, _card_footer(entry, f"⚠️ ошибка: {esc(str(exc))[:80]}"))
+            _edit(entry, chat_id, message_id,
+                  _card_footer(entry, f"⚠️ ошибка: {esc(str(exc))[:60]}"))
             return
         answer_callback(cb["id"], "Опубликовано")
-        edit_message(chat_id, message_id, _card_footer(entry, "⚡ опубликовано"), reply_markup={"inline_keyboard": []})
+        _edit(entry, chat_id, message_id, _card_footer(entry, "⚡ опубликовано"),
+              reply_markup={"inline_keyboard": []})
         log(f"  ⚡ опубликовано: {entry.get('title', '')[:60]}")
 
     elif action == "r":
@@ -94,21 +107,24 @@ def handle_callback(cb, queue, approved):
         try:
             fresh = write_post(_Item(entry), variant_hint=REWRITE_HINT, temperature=0.9)
         except RuntimeError as exc:
-            edit_message(chat_id, message_id, _card_footer(entry, f"⚠️ {esc(str(exc))[:80]}"),
-                         reply_markup=keyboard(item_id))
+            _edit(entry, chat_id, message_id,
+                  _card_footer(entry, f"⚠️ {esc(str(exc))[:60]}"),
+                  reply_markup=keyboard(item_id))
             return
         entry["text"] = render(fresh, entry.get("url", ""), entry.get("source_name", ""))
         entry["title"] = fresh.get("title", entry.get("title", ""))
         entry["llm_score"] = fresh.get("score")
         entry["rewrites"] = entry.get("rewrites", 0) + 1
         status = f"вариант {entry['rewrites'] + 1} · оценка {fresh.get('score')}/10"
-        edit_message(chat_id, message_id, _card_footer(entry, status), reply_markup=keyboard(item_id))
+        _edit(entry, chat_id, message_id, _card_footer(entry, status),
+              reply_markup=keyboard(item_id))
         log(f"  ♻️ переписано: {entry.get('title', '')[:60]}")
 
     elif action == "d":
         _drop(queue, item_id)
         answer_callback(cb["id"], "Удалено")
-        edit_message(chat_id, message_id, _card_footer(entry, "🗑 удалено"), reply_markup={"inline_keyboard": []})
+        _edit(entry, chat_id, message_id, _card_footer(entry, "🗑 удалено"),
+              reply_markup={"inline_keyboard": []})
         log(f"  🗑 удалено: {entry.get('title', '')[:60]}")
 
     else:

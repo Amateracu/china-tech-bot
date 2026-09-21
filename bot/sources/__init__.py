@@ -16,6 +16,7 @@ class Item:
     china_native: bool = False
     weight: float = 1.0
     published: Optional[datetime] = None
+    image: str = ""
     score: float = 0.0
     matched: list = field(default_factory=list)
 

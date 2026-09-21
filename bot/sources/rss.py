@@ -13,7 +13,9 @@ NS = {
     "atom": "http://www.w3.org/2005/Atom",
     "content": "http://purl.org/rss/1.0/modules/content/",
     "dc": "http://purl.org/dc/elements/1.1/",
+    "media": "http://search.yahoo.com/mrss/",
 }
+_IMG_IN_HTML = re.compile(r'<img[^>]+src=["\']([^"\']+)', re.I)
 _ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}")
 
 
@@ -26,6 +28,27 @@ def _text(node, *paths) -> str:
             href = found.get("href")
             if href:
                 return href.strip()
+    return ""
+
+
+def _feed_image(node) -> str:
+    """Картинка из самого фида: enclosure, media:content, media:thumbnail или <img> в теле."""
+    enc = node.find("enclosure")
+    if enc is not None and (enc.get("type") or "").startswith("image"):
+        if enc.get("url"):
+            return enc.get("url").strip()
+    for path in ("media:content", "media:thumbnail"):
+        for found in node.findall(path, NS):
+            mtype = found.get("type") or found.get("medium") or ""
+            url = (found.get("url") or "").strip()
+            if url and ("image" in mtype or not mtype):
+                return url
+    for path in ("description", "content:encoded", "atom:content"):
+        found = node.find(path, NS)
+        if found is not None and found.text:
+            m = _IMG_IN_HTML.search(found.text)
+            if m:
+                return m.group(1).strip()
     return ""
 
 
@@ -91,6 +114,7 @@ def fetch_rss(src: dict, timeout: int = 25) -> list:
                 china_native=bool(src.get("china_native")),
                 weight=float(src.get("weight", 1.0)),
                 published=published,
+                image=_feed_image(node),
             )
         )
     _ = atom
