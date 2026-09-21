@@ -257,6 +257,24 @@
    "message_id": 26,
    "created_at": "2026-09-21T17:41:08.225865+00:00",
    "rewrites": 0
+  },
+  {
+   "id": "4649b105f380",
+   "title": "Китай запретит ИИ-компаньонов для несовершеннолетних",
+   "text": "Китайский интернет-регулятор подготовил проект правил, запрещающих платформам и разработчикам игр предлагать несовершеннолетним «виртуальную близость» — в том числе ИИ-компаньонов и «виртуальных родственников».\n\nДокумент называется «Обеспечение безопасного и здорового использования интернета несовершеннолетними». Помимо запрета на сервисы виртуальных компаньонов, он вводит ограничения против механик, которые вызывают зависимость у детей до 18 лет.\n\nПричина — рост популярности ИИ-собеседников: такие сервисы всё активнее используются подростками, а регулятор видит в них риск зависимости и нездоровой привязанности. Правила пока в статусе проекта, окончательная редакция и сроки вступления в силу не объявлены.\n\nЕсли документ примут в текущем виде, он затронет не только соцсети, но и игровую индустрию — то есть заметную часть китайского рынка потребительских ИИ-продуктов.\n\n#Китай #ИИ\n\n<a href=\"https://www.scmp.com/tech/policy/article/3368252/chinese-regulator-drafts-rules-protect-teenagers-intimate-ai-companions\">Источник: SCMP Tech</a>",
+   "url": "https://www.scmp.com/tech/policy/article/3368252/chinese-regulator-drafts-rules-protect-teenagers-intimate-ai-companions",
+   "source_name": "SCMP Tech",
+   "source_id": "scmp_tech",
+   "llm_score": 7,
+   "raw_title": "Chinese regulator drafts rules to protect teenagers from ‘intimate’ AI companions",
+   "raw_summary": "China’s top internet watchdog has drafted new rules to regulate how social platforms and game developers should protect minors, including a ban on offering “virtual intimacy services” to those under 18 as artificial intelligence-powered companions gain traction. The rules, titled “Ensuring minors’ safe and healthy use of the internet”, would ban online platforms from providing “virtual relatives or companions”, and prohibit them from offering services that “induce minors to become addicted or...",
+   "lang": "en",
+   "image_url": "https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2026/09/21/adbec41d-526a-4df8-8427-fa3b7eef0fc4_54c6a58f.jpg?itok=OzVQ8DTd&v=1789982798",
+   "media_kind": "",
+   "mod_is_photo": false,
+   "message_id": 31,
+   "created_at": "2026-09-21T17:52:36.484604+00:00",
+   "rewrites": 0
   }
  ]
 }
