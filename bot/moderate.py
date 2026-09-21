@@ -194,9 +194,15 @@ def main() -> int:
         log("Новых апдейтов нет.")
         return 0
 
+    # Подтверждаем приём СРАЗУ. Иначе любое падение ниже означает, что на
+    # следующем запуске Telegram пришлёт те же события снова: повторные ответы
+    # на /start, повторные публикации, дубли в очереди.
+    offset_state["offset"] = updates[-1]["update_id"] + 1
+    if not DRY_RUN:
+        store.save("offset.json", offset_state)
+
     log(f"Апдейтов: {len(updates)}")
     for update in updates:
-        offset_state["offset"] = update["update_id"] + 1
         try:
             if "callback_query" in update:
                 handle_callback(update["callback_query"], queue, approved)
@@ -204,6 +210,11 @@ def main() -> int:
                 handle_message(update["message"], queue, approved)
         except Exception as exc:  # один битый апдейт не должен ронять прогон
             log(f"  ! ошибка обработки: {exc}")
+        # пишем очереди после каждого события, чтобы падение не отменило
+        # уже применённые решения
+        if not DRY_RUN:
+            store.save("queue.json", queue)
+            store.save("approved.json", approved)
 
     # подчищаем протухшие карточки: неотвеченные дольше 3 суток
     cutoff = now_utc() - timedelta(days=3)
@@ -216,7 +227,6 @@ def main() -> int:
         log(f"  протухло и удалено из очереди: {before - len(queue['items'])}")
 
     if not DRY_RUN:
-        store.save("offset.json", offset_state)
         store.save("queue.json", queue)
         store.save("approved.json", approved)
     log("Готово.")
