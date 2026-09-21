@@ -107,14 +107,17 @@ def handle_callback(cb, queue, approved):
         log(f"  ✅ в очередь: {entry.get('title', '')[:60]}")
 
     elif action == "n":
-        _drop(queue, item_id)
         try:
             publish_now(entry)
         except RuntimeError as exc:
+            # новость остаётся в очереди: неудачная публикация не должна её терять
+            log(f"  ! публикация не удалась: {exc}")
             _ack(cb["id"], "Ошибка публикации")
             _edit(entry, chat_id, message_id,
-                  _card_footer(entry, f"⚠️ ошибка: {esc(str(exc))[:60]}"))
+                  _card_footer(entry, f"⚠️ ошибка: {esc(str(exc))[:160]}"),
+                  reply_markup=keyboard(item_id))
             return
+        _drop(queue, item_id)
         _ack(cb["id"], "Опубликовано")
         _edit(entry, chat_id, message_id, _card_footer(entry, "⚡ опубликовано"),
               reply_markup={"inline_keyboard": []})
