@@ -1,1 +1,34 @@
-{"items": []}
+{
+ "items": [
+  {
+   "id": "81412d3456e3",
+   "title": "Moonshot’s Kimi K3 lands on Amazon in key test for Chinese open-source AI revenue",
+   "url": "https://www.scmp.com/tech/tech-trends/article/3368274/moonshots-kimi-k3-lands-amazon-key-test-chinese-open-source-ai-revenue",
+   "at": "2026-09-21T14:15:45.903175+00:00"
+  },
+  {
+   "id": "9a09b280d15b",
+   "title": "Dongfeng’s Xiaodong humanoid robot is scheduled to enter a factory in October",
+   "url": "https://technode.com/2026/09/21/dongfengs-xiaodong-humanoid-robot-is-scheduled-to-enter-a-factory-in-october",
+   "at": "2026-09-21T14:15:48.409566+00:00"
+  },
+  {
+   "id": "26a740a40611",
+   "title": "Chinese AI chipmaker Hygon plots expansion from data centres to robotics",
+   "url": "https://www.scmp.com/tech/tech-trends/article/3368168/chinese-ai-chipmaker-hygon-plots-expansion-data-centres-robotics",
+   "at": "2026-09-21T14:15:51.265723+00:00"
+  },
+  {
+   "id": "e391bb44ff43",
+   "title": "Radiant D35 RISC-V Dataflow Chip Partners With PrimeBot for Embodied Edge",
+   "url": "https://pandaily.com/radiant-d35-risc-v-dataflow-chip-primebot-edge",
+   "at": "2026-09-21T14:15:54.044617+00:00"
+  },
+  {
+   "id": "0ee7d69a6025",
+   "title": "Unitree Opens Partial Weights for UnifoLM-WLA-1.0 After 64-Task Reveal",
+   "url": "https://pandaily.com/unitree-unifolm-wla-1-0-partial-weights-64-tasks",
+   "at": "2026-09-21T14:15:56.558542+00:00"
+  }
+ ]
+}

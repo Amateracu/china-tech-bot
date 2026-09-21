@@ -1,1 +1,79 @@
-{"items": []}
+{
+ "items": [
+  {
+   "id": "81412d3456e3",
+   "title": "Kimi K3 от Moonshot AI вышел на Amazon Bedrock",
+   "text": "Китайский стартап Moonshot AI начал поставлять свою флагманскую модель Kimi K3 в Amazon Web Services — она доступна на платформе Amazon Bedrock, инструменте AWS для создания приложений на генеративном ИИ.\n\nAmazon называет модель «мощным новым вариантом для программирования и работы со знаниями». Для Moonshot это ключевая проверка того, как открытые модели (open-weight) могут приносить доход через сторонние платформы, а не только через собственный сервис.\n\nКонтекст: китайские открытые модели всё активнее выходят на западные облака — это меняет рынок, где раньше доминировали закрытые решения. Если схема с монетизацией через AWS сработает, другие китайские разработчики могут пойти тем же путём.\n\n#Kimi #ИИ\n\n<a href=\"https://www.scmp.com/tech/tech-trends/article/3368274/moonshots-kimi-k3-lands-amazon-key-test-chinese-open-source-ai-revenue\">Источник: SCMP Tech</a>",
+   "url": "https://www.scmp.com/tech/tech-trends/article/3368274/moonshots-kimi-k3-lands-amazon-key-test-chinese-open-source-ai-revenue",
+   "source_name": "SCMP Tech",
+   "source_id": "scmp_tech",
+   "llm_score": 7,
+   "raw_title": "Moonshot’s Kimi K3 lands on Amazon in key test for Chinese open-source AI revenue",
+   "raw_summary": "Chinese artificial intelligence start-up Moonshot AI has begun supplying its flagship Kimi K3 model to Amazon Web Services (AWS), one of the world’s largest cloud services providers, in a major test case for how open-weight AI models can generate higher revenue from third-party platforms. The model is now available on Amazon Bedrock, AWS’s tool for building generative AI applications, offering “a powerful new option for coding and knowledge work”, Amazon said in an announcement on Friday. While...",
+   "lang": "en",
+   "message_id": 3,
+   "created_at": "2026-09-21T14:15:46.265419+00:00",
+   "rewrites": 0
+  },
+  {
+   "id": "9a09b280d15b",
+   "title": "Гуманоид Dongfeng Xiaodong выйдет на завод в октябре",
+   "text": "Гуманоидный робот Dongfeng Xiaodong до конца октября отправится на завод для обучения. Об этом сообщил Чжан Чжэньлинь, главный инженер автопроизводителя по интеллектуальным технологиям.\n\nПо его словам, к концу года робот должен быть задействован в пробном производстве, а на следующий год запланирован мелкосерийный выпуск. Разработка Xiaodong ведётся силами самого Dongfeng.\n\nDongfeng — один из крупнейших автоконцернов Китая, и выход собственного гуманоида на реальные производственные задачи показывает, как автопром пытается встроить человекоподобных роботов в сборочные линии. Пока речь о тестовом этапе и малых партиях, но именно такие шаги обычно предшествуют масштабному внедрению.\n\n#роботы #Dongfeng\n\n<a href=\"https://technode.com/2026/09/21/dongfengs-xiaodong-humanoid-robot-is-scheduled-to-enter-a-factory-in-october\">Источник: TechNode</a>",
+   "url": "https://technode.com/2026/09/21/dongfengs-xiaodong-humanoid-robot-is-scheduled-to-enter-a-factory-in-october",
+   "source_name": "TechNode",
+   "source_id": "technode",
+   "llm_score": 6,
+   "raw_title": "Dongfeng’s Xiaodong humanoid robot is scheduled to enter a factory in October",
+   "raw_summary": "Dongfeng’s humanoid robot Xiaodong is scheduled to enter a factory for training by the end of October, according to Zhang Zhenlin, the automaker’s chief engineer for intelligent technology. The robot is expected to take part in trial production by the end of this year, with small-batch production planned for next year. Xiaodong is being developed […]",
+   "lang": "en",
+   "message_id": 4,
+   "created_at": "2026-09-21T14:15:48.801228+00:00",
+   "rewrites": 0
+  },
+  {
+   "id": "26a740a40611",
+   "title": "Hygon готовит чип для роботов на базе серии CPU1000",
+   "text": "Китайский производитель чипов Hygon Information Technology выпускает новый процессор для робототехники — это выход за пределы его основного направления, серверных решений.\n\nПрезентация запланирована на вторник. Новинка — развитие линейки CPU1000, она рассчитана на устройства, которые напрямую взаимодействуют с окружающей средой. В компании связывают запуск с растущей ролью «физического ИИ» — машин, работающих не в дата-центре, а в реальном мире.\n\nHygon сейчас в основном известна процессорами для серверов и центров обработки данных. Переход в категорию чипов для роботов означает конкуренцию с другими китайскими и зарубежными поставщиками, которые уже работают в этом сегменте.\n\nПодробностей о характеристиках, производительности и партнёрах пока нет — их, вероятно, раскроют на презентации.\n\n#Hygon #чипы\n\n<a href=\"https://www.scmp.com/tech/tech-trends/article/3368168/chinese-ai-chipmaker-hygon-plots-expansion-data-centres-robotics\">Источник: SCMP Tech</a>",
+   "url": "https://www.scmp.com/tech/tech-trends/article/3368168/chinese-ai-chipmaker-hygon-plots-expansion-data-centres-robotics",
+   "source_name": "SCMP Tech",
+   "source_id": "scmp_tech",
+   "llm_score": 6,
+   "raw_title": "Chinese AI chipmaker Hygon plots expansion from data centres to robotics",
+   "raw_summary": "Chinese chipmaker Hygon Information Technology is set to release a new chip targeting complex real-world applications including robotics, an expansion from its current focus on data centres. The product launch, slated for Tuesday, marks Hygon’s move into a new chip category powering machines that interact directly with their environments, as physical artificial intelligence becomes increasingly important. The new chip, an iteration of the company’s CPU1000 series, is designed to meet “low-power,...",
+   "lang": "en",
+   "message_id": 5,
+   "created_at": "2026-09-21T14:15:51.636186+00:00",
+   "rewrites": 0
+  },
+  {
+   "id": "e391bb44ff43",
+   "title": "Radiant D35: RISC-V чип для роботов-гуманоидов",
+   "text": "Китайский разработчик чипов Ricore из Сучжоу заключил партнёрство с PrimeBot: его AI-чип Radiant D35 на архитектуре RISC-V станет частью вычислительной экосистемы для человекоподобных и воплощённых роботов.\n\nRadiant D35 построен на dataflow-архитектуре и ориентирован на инференс на периферии (edge), а не на обучение моделей в облаке. Это принципиальный момент: гуманоидам нужна обработка данных прямо на борту, без задержек на передачу в дата-центр.\n\nПока это лишь анонс партнёрства — конкретных характеристик чипа и сроков поставок в исходнике нет. Но сам вектор показателен: китайские вендоры всё активнее занимают нишу edge-вычислений для робототехники, где пока нет устоявшихся стандартов.\n\n#чипы #робототехника\n\n<a href=\"https://pandaily.com/radiant-d35-risc-v-dataflow-chip-primebot-edge\">Источник: Pandaily</a>",
+   "url": "https://pandaily.com/radiant-d35-risc-v-dataflow-chip-primebot-edge",
+   "source_name": "Pandaily",
+   "source_id": "pandaily",
+   "llm_score": 6,
+   "raw_title": "Radiant D35 RISC-V Dataflow Chip Partners With PrimeBot for Embodied Edge",
+   "raw_summary": "Suzhou chip designer Ricore’s Radiant D35 RISC-V dataflow AI chip was named a compute ecosystem partner for PrimeBot, aiming edge inference at humanoid and embodied robots rather than cloud training.",
+   "lang": "en",
+   "message_id": 6,
+   "created_at": "2026-09-21T14:15:54.371871+00:00",
+   "rewrites": 0
+  },
+  {
+   "id": "0ee7d69a6025",
+   "title": "Unitree частично открыла веса модели UnifoLM-WLA-1.0",
+   "text": "Unitree начала частично открывать веса и данные модели UnifoLM-WLA-1.0 — это world-language-action модель для человекоподобных роботов на 6 млрд параметров, охватывающая 64 задачи.\n\nПока доступна только часть весов и данных. Код для пост-тренировки и полные датасеты компания обещает выложить позже, сроки не называются.\n\nWorld-language-action модели связывают восприятие, язык и действия робота: это одно из ключевых направлений в гуманоидной робототехнике. Открытие весов даже частично позволяет сторонним разработчикам воспроизводить и дообучать модель под свои задачи, а не только смотреть на демонстрации.\n\nДля Unitree это шаг в сторону открытой экосистемы: компания известна в первую очередь железом, а теперь пытается закрепиться и в софте для гуманоидов.\n\n#роботы #Unitree\n\n<a href=\"https://pandaily.com/unitree-unifolm-wla-1-0-partial-weights-64-tasks\">Источник: Pandaily</a>",
+   "url": "https://pandaily.com/unitree-unifolm-wla-1-0-partial-weights-64-tasks",
+   "source_name": "Pandaily",
+   "source_id": "pandaily",
+   "llm_score": 6,
+   "raw_title": "Unitree Opens Partial Weights for UnifoLM-WLA-1.0 After 64-Task Reveal",
+   "raw_summary": "Unitree has begun opening partial UnifoLM-WLA-1.0 weights and data for its 6B world–language–action humanoid model covering 64 tasks, while post-training code and full datasets remain on the roadmap.",
+   "lang": "en",
+   "message_id": 7,
+   "created_at": "2026-09-21T14:15:56.894006+00:00",
+   "rewrites": 0
+  }
+ ]
+}
