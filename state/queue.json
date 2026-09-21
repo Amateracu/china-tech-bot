@@ -1,21 +1,6 @@
 {
  "items": [
   {
-   "id": "81412d3456e3",
-   "title": "Kimi K3 от Moonshot AI вышел на Amazon Bedrock",
-   "text": "Китайский стартап Moonshot AI начал поставлять свою флагманскую модель Kimi K3 в Amazon Web Services — она доступна на платформе Amazon Bedrock, инструменте AWS для создания приложений на генеративном ИИ.\n\nAmazon называет модель «мощным новым вариантом для программирования и работы со знаниями». Для Moonshot это ключевая проверка того, как открытые модели (open-weight) могут приносить доход через сторонние платформы, а не только через собственный сервис.\n\nКонтекст: китайские открытые модели всё активнее выходят на западные облака — это меняет рынок, где раньше доминировали закрытые решения. Если схема с монетизацией через AWS сработает, другие китайские разработчики могут пойти тем же путём.\n\n#Kimi #ИИ\n\n<a href=\"https://www.scmp.com/tech/tech-trends/article/3368274/moonshots-kimi-k3-lands-amazon-key-test-chinese-open-source-ai-revenue\">Источник: SCMP Tech</a>",
-   "url": "https://www.scmp.com/tech/tech-trends/article/3368274/moonshots-kimi-k3-lands-amazon-key-test-chinese-open-source-ai-revenue",
-   "source_name": "SCMP Tech",
-   "source_id": "scmp_tech",
-   "llm_score": 7,
-   "raw_title": "Moonshot’s Kimi K3 lands on Amazon in key test for Chinese open-source AI revenue",
-   "raw_summary": "Chinese artificial intelligence start-up Moonshot AI has begun supplying its flagship Kimi K3 model to Amazon Web Services (AWS), one of the world’s largest cloud services providers, in a major test case for how open-weight AI models can generate higher revenue from third-party platforms. The model is now available on Amazon Bedrock, AWS’s tool for building generative AI applications, offering “a powerful new option for coding and knowledge work”, Amazon said in an announcement on Friday. While...",
-   "lang": "en",
-   "message_id": 3,
-   "created_at": "2026-09-21T14:15:46.265419+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "9a09b280d15b",
    "title": "Гуманоид Dongfeng Xiaodong выйдет на завод в октябре",
    "text": "Гуманоидный робот Dongfeng Xiaodong до конца октября отправится на завод для обучения. Об этом сообщил Чжан Чжэньлинь, главный инженер автопроизводителя по интеллектуальным технологиям.\n\nПо его словам, к концу года робот должен быть задействован в пробном производстве, а на следующий год запланирован мелкосерийный выпуск. Разработка Xiaodong ведётся силами самого Dongfeng.\n\nDongfeng — один из крупнейших автоконцернов Китая, и выход собственного гуманоида на реальные производственные задачи показывает, как автопром пытается встроить человекоподобных роботов в сборочные линии. Пока речь о тестовом этапе и малых партиях, но именно такие шаги обычно предшествуют масштабному внедрению.\n\n#роботы #Dongfeng\n\n<a href=\"https://technode.com/2026/09/21/dongfengs-xiaodong-humanoid-robot-is-scheduled-to-enter-a-factory-in-october\">Источник: TechNode</a>",
