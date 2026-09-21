@@ -248,6 +248,54 @@ class TestPublishWindow(unittest.TestCase):
             self.assertEqual(publish.today_count(published), 1)
 
 
+class TestTelegramParams(unittest.TestCase):
+    """Регрессия: параметр timeout у Telegram не должен подменять таймаут HTTP.
+
+    Из-за этого модерация падала с ValueError ещё до первого запроса.
+    """
+
+    def _post(self, captured):
+        def fake(url, **kw):
+            # urllib3 отвергает неположительный таймаут — воспроизводим проверку
+            t = kw.get("timeout")
+            if t is None or (isinstance(t, (int, float)) and t <= 0):
+                raise ValueError(f"недопустимый таймаут HTTP: {t!r}")
+            captured.append((url.rsplit("/", 1)[-1], kw))
+            resp = mock.Mock()
+            resp.status_code = 200
+            resp.json = lambda: {"ok": True, "result": []}
+            return resp
+        return fake
+
+    def test_get_updates_keeps_http_timeout_positive(self):
+        from bot import tg_api
+        got = []
+        with mock.patch("bot.tg_api.requests.post", side_effect=self._post(got)):
+            tg_api.get_updates(0)
+        method, kw = got[0]
+        self.assertEqual(method, "getUpdates")
+        self.assertGreater(kw["timeout"], 0)
+        self.assertNotIn("timeout", kw["json"], "короткий опрос не шлёт timeout в Telegram")
+
+    def test_long_poll_sets_both_timeouts(self):
+        from bot import tg_api
+        got = []
+        with mock.patch("bot.tg_api.requests.post", side_effect=self._post(got)):
+            tg_api.get_updates(5, poll_seconds=25)
+        _, kw = got[0]
+        self.assertEqual(kw["json"]["timeout"], 25)
+        self.assertGreaterEqual(kw["timeout"], 25)
+
+    def test_other_methods_have_timeout(self):
+        from bot import tg_api
+        got = []
+        with mock.patch("bot.tg_api.requests.post", side_effect=self._post(got)):
+            tg_api.answer_callback("cb", "ок")
+            tg_api.edit_caption(1, 2, "текст")
+        for _, kw in got:
+            self.assertGreater(kw["timeout"], 0)
+
+
 class TestUtil(unittest.TestCase):
     def test_similarity(self):
         self.assertGreater(util.similarity("Huawei unveils 5nm chip",

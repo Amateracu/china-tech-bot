@@ -11,14 +11,15 @@ CAPTION_LIMIT = 1024   # лимит Telegram на подпись к фото
 TEXT_LIMIT = 4096
 
 
-def call(method: str, timeout: int = 30, **params):
+def call(method: str, http_timeout: int = 30, **params):
     if DRY_RUN and method not in ("getUpdates", "getMe"):
         print(f"[DRY_RUN] {method}: {str(params)[:300]}")
         return {"ok": True, "result": {"message_id": 0}}
 
     for attempt in range(3):
         resp = requests.post(
-            API.format(token=BOT_TOKEN, method=method), json=params, timeout=timeout
+            API.format(token=BOT_TOKEN, method=method), json=params,
+            timeout=http_timeout,
         )
         data = resp.json()
         if data.get("ok"):
@@ -121,13 +122,15 @@ def answer_callback(callback_id, text=""):
     return call("answerCallbackQuery", callback_query_id=callback_id, text=text)
 
 
-def get_updates(offset: int, timeout: int = 0):
-    return call(
-        "getUpdates",
-        offset=offset,
-        timeout=timeout,
-        allowed_updates=["callback_query", "message"],
-    )
+def get_updates(offset: int, poll_seconds: int = 0):
+    """poll_seconds > 0 — долгий опрос на стороне Telegram; 0 — забрать и сразу выйти.
+
+    Важно: у Telegram свой параметр timeout, и он не должен подменять таймаут HTTP.
+    """
+    params = {"offset": offset, "allowed_updates": ["callback_query", "message"]}
+    if poll_seconds:
+        params["timeout"] = poll_seconds
+    return call("getUpdates", http_timeout=30 + poll_seconds, **params)
 
 
 def keyboard(item_id: str):
