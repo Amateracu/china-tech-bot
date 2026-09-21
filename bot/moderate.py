@@ -89,8 +89,12 @@ def handle_callback(cb, queue, approved):
     chat_id = (message.get("chat") or {}).get("id")
     message_id = message.get("message_id")
 
+    log(f"  нажатие: {data!r} от chat_id={chat_id}")
+
     entry = _find(queue, item_id)
     if entry is None:
+        known = [e["id"] for e in queue["items"]]
+        log(f"  ! новости {item_id!r} нет в очереди; в очереди {len(known)}: {known}")
         _ack(cb["id"], "Эта новость уже обработана")
         return
 

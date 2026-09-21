@@ -19,6 +19,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # workflow_dispatch привязывает запуск к коммиту на момент нажатия,
+      # поэтому подтягиваем актуальное состояние — иначе запуск может затереть
+      # очередь, записанную предыдущим прогоном.
+      - name: Взять свежее состояние
+        run: |
+          git fetch origin ${{ github.ref_name }}
+          git reset --hard origin/${{ github.ref_name }}
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
