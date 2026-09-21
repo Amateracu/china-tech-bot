@@ -223,24 +223,6 @@
    "rewrites": 0
   },
   {
-   "id": "e0cdb895afa4",
-   "title": "США и Китай договорились о диалоге по безопасности ИИ",
-   "text": "США и Китай договорились создать официальный канал диалога по ИИ, включая механизм уведомления об угрозах. Договорённость объявлена после переговоров в Нью-Йорке между министром финансов США Скоттом Бессентом, торговым представителем Джеймисоном Гриром и вице-премьером КНР Хэ Лифэном.\n\nПо оценке аналитиков, это прагматичный шаг к предотвращению кризисов в технологическом противостоянии двух стран. Механизм уведомления об угрозах должен снизить риск того, что инцидент в сфере ИИ перерастёт в полноценный конфликт.\n\nОграничения тоже очевидны: разногласия по доступу к чипам, дистилляции моделей и доминированию на рынке никуда не делись и, по мнению экспертов, сузят эффект от соглашения. То есть канал связи появится, но принципиальные спорные точки остаются.\n\n#ИИ #Китай\n\n<a href=\"https://www.scmp.com/tech/tech-war/article/3368281/ai-safety-fears-mount-can-us-china-hotline-prevent-global-crisis\">Источник: SCMP Tech</a>",
-   "url": "https://www.scmp.com/tech/tech-war/article/3368281/ai-safety-fears-mount-can-us-china-hotline-prevent-global-crisis",
-   "source_name": "SCMP Tech",
-   "source_id": "scmp_tech",
-   "llm_score": 6,
-   "raw_title": "As AI safety fears mount, can a US-China hotline prevent a global crisis?",
-   "raw_summary": "The United States and China’s agreement to establish an official AI dialogue, including a proposed threat-notification system, marks a pragmatic step towards crisis prevention in their tech war, even as deep-seated divisions over chip access, model distillation and market dominance threaten to limit its impact, analysts said. Announced following high-level talks in New York on Sunday between US Treasury Secretary Scott Bessent, US Trade Representative Jamieson Greer and Vice-Premier He Lifeng,...",
-   "lang": "en",
-   "image_url": "https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2026/09/21/160f7627-f3e6-4935-a357-76c13a32e1f9_703953c9.jpg?itok=cBhAyygB&v=1789991800",
-   "media_kind": "",
-   "mod_is_photo": false,
-   "message_id": 25,
-   "created_at": "2026-09-21T17:41:04.944657+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "238ddbfe6a59",
    "title": "PrimeBot начал продажи персональных роботов Q1 и T1",
    "text": "Китайская PrimeBot открыла продажи складного робота Q1 и трансформирующегося T1 по цене от 19 999 юаней, отправка заказов — с 1 октября.\n\nОбе модели построены вокруг одного и того же шарнира: диаметр 47 мм, масса 260 г, серийное производство. Заявленная пиковая удельная плотность крутящего момента — 85 Н·м/кг.\n\nКлючевое здесь не цена, а сам узел. Массовый компактный шарнир с такой отдачей — это то, что определяет, насколько дешёвым и лёгким может быть персональный робот. PrimeBot делает ставку именно на него, а не на уникальность каждой модели.\n\nЧто именно умеют Q1 и T1, в исходнике не раскрывается — только форм-фактор: один складывается, второй трансформируется.\n\n#роботы #Китай\n\n<a href=\"https://pandaily.com/primebot-q1-t1-260g-egg-joint-personal-robots\">Источник: Pandaily</a>",
