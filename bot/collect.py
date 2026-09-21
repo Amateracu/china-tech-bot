@@ -109,6 +109,8 @@ def main() -> int:
         blob, media_kind = media.resolve(
             data["title"], image_url, item.url, item.source_name
         )
+        if not media_kind:
+            log(f"    без картинки: фид дал {image_url[:60]!r}")
         card = _moderation_card(item, data, post_text, media_kind)
 
         as_photo = bool(blob) and len(card) <= CAPTION_LIMIT

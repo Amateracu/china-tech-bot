@@ -126,7 +126,12 @@ CARD_W, CARD_H = 1200, 630
 _FONT_PATHS = (
     "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf",
     "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf",
+    "/usr/share/fonts/truetype/liberation2/LiberationSans-Bold.ttf",
+    "/usr/share/fonts/truetype/freefont/FreeSansBold.ttf",
+    "/usr/share/fonts/truetype/noto/NotoSans-Bold.ttf",
+    "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+    "/System/Library/Fonts/Helvetica.ttc",
 )
 _CJK_PATHS = (
     "/usr/share/fonts/opentype/noto/NotoSansCJK-Black.ttc",
@@ -231,5 +236,6 @@ def resolve(title: str, image_url: str, page_url: str, source_name: str):
             return None, ""
     try:
         return make_card(title, source_name), "card"
-    except Exception:
+    except Exception as exc:
+        print(f"    карточка не нарисовалась: {exc}", flush=True)
         return None, ""
