@@ -15,6 +15,10 @@ json_str() { grep -o "\"$1\":\"[^\"]*\"" | head -1 | cut -d'"' -f4; }
 
 cd "$(dirname "$0")"
 
+# Папку готовил Claude с ограниченными правами — git мог оставить файлы-замки.
+find .git -name "*.lock" -delete 2>/dev/null || true
+find .git/objects -name "tmp_obj_*" -delete 2>/dev/null || true
+
 # ── 0. gh ────────────────────────────────────────────────────────────────────
 say "1/7  Проверяю GitHub CLI"
 if ! command -v gh >/dev/null; then
