@@ -10,6 +10,7 @@ DEFAULTS = {
     "approved.json": {"items": []},      # одобренные, ждут слота публикации
     "published.json": {"items": [], "last_at": None},
     "offset.json": {"offset": 0},        # offset для getUpdates
+    "worker.json": {"last_collect": None},  # когда воркер последний раз собирал новости
 }
 
 
