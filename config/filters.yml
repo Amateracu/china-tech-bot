@@ -1,0 +1,112 @@
+# Предфильтр до LLM: дешёвый отсев мусора, чтобы не жечь токены.
+
+# Достаточно одного совпадения, чтобы новость считалась «про Китай».
+china_markers:
+  - china
+  - chinese
+  - beijing
+  - shanghai
+  - shenzhen
+  - hangzhou
+  - hong kong
+  - taiwan
+  - 中国
+  - 国产
+  - 华为
+  - 小米
+
+# Технологические сущности. Вес = вклад в score.
+entities:
+  huawei: 3
+  xiaomi: 2
+  byd: 2
+  catl: 2
+  smic: 3
+  deepseek: 3
+  alibaba: 2
+  tencent: 2
+  bytedance: 2
+  baidu: 2
+  nio: 1.5
+  xpeng: 1.5
+  li auto: 1.5
+  zeekr: 1.5
+  chery: 1
+  geely: 1
+  unitree: 3
+  dji: 2
+  honor: 1
+  oppo: 1
+  vivo: 1
+  zte: 1.5
+  xiaohongshu: 1
+  meituan: 1
+  zhipu: 2.5
+  moonshot: 2
+  minimax: 2
+  qwen: 2.5
+  kimi: 2
+  cambricon: 2.5
+  loongson: 2
+  hygon: 2
+  horizon robotics: 2
+  semidrive: 1.5
+  yangtze memory: 2.5
+  ymtc: 2.5
+  cxmt: 2.5
+  tsmc: 1.5
+  asml: 1.5
+  nvidia: 1
+
+topics:
+  chip: 2.5
+  semiconductor: 2.5
+  lithography: 3
+  euv: 3
+  foundry: 2
+  wafer: 2
+  ai model: 2.5
+  open-source model: 2.5
+  llm: 2
+  robot: 2.5
+  humanoid: 3
+  robotaxi: 2.5
+  autonomous driving: 2
+  solid-state battery: 3
+  battery: 1.5
+  ev: 1.5
+  drone: 2
+  satellite: 2
+  quantum: 2.5
+  export control: 2.5
+  sanction: 2
+  6g: 2
+  foldable: 1.5
+  smartphone: 1
+  data center: 1.5
+  чип: 2.5
+  芯片: 2.5
+  机器人: 2.5
+  人形: 3
+  电池: 1.5
+  大模型: 2.5
+  开源: 1.5
+
+# Если встретилось — новость выбрасывается сразу.
+blocklist:
+  - horoscope
+  - lottery
+  - football
+  - world cup
+  - celebrity
+  - box office
+  - 彩票
+  - 明星
+  - 娱乐
+  - 星座
+  - sponsored
+  - advertorial
+  - 广告
+
+# Минимальный score, чтобы новость вообще ушла в LLM.
+min_score: 3.0

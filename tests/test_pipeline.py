@@ -1,0 +1,185 @@
+"""Оффлайн-проверка пайплайна: парсинг фида, фильтр, дедуп, сборка поста.
+
+Запуск: python -m tests.test_pipeline
+Сеть и API не используются — всё на фикстурах.
+"""
+import sys
+import unittest
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+from unittest import mock
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from bot import relevance, util                     # noqa: E402
+from bot.llm import render                          # noqa: E402
+from bot.sources import Item                        # noqa: E402
+from bot.sources.rss import fetch_rss               # noqa: E402
+
+NOW = datetime.now(timezone.utc)
+RSS = f"""<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"><channel><title>Fixture</title>
+<item>
+  <title>Huawei unveils new 5nm chip made by SMIC</title>
+  <link>https://example.com/a?utm_source=rss&amp;id=1</link>
+  <description>&lt;p&gt;The Chinese company said the semiconductor is produced domestically.&lt;/p&gt;</description>
+  <pubDate>{NOW.strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
+</item>
+<item>
+  <title>Huawei presents a 5nm chip manufactured by SMIC</title>
+  <link>https://example.com/b</link>
+  <description>Same story, different outlet.</description>
+  <pubDate>{NOW.strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
+</item>
+<item>
+  <title>China lottery results for September</title>
+  <link>https://example.com/c</link>
+  <description>Nothing technological here.</description>
+  <pubDate>{NOW.strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
+</item>
+<item>
+  <title>Local bakery opens in Lyon</title>
+  <link>https://example.com/d</link>
+  <description>Croissants.</description>
+  <pubDate>{(NOW - timedelta(days=5)).strftime('%a, %d %b %Y %H:%M:%S +0000')}</pubDate>
+</item>
+</channel></rss>"""
+
+ATOM = """<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>AtomFix</title>
+<entry>
+  <title>Unitree humanoid robot enters mass production in Hangzhou</title>
+  <link rel="alternate" href="https://example.org/robot"/>
+  <summary>Chinese robotics maker starts shipping.</summary>
+  <published>2026-09-21T06:00:00Z</published>
+</entry></feed>"""
+
+SRC = {"id": "fix", "name": "Fixture", "url": "https://example.com/feed",
+       "lang": "en", "china_native": True, "weight": 1.0}
+
+
+def _fake_get(body):
+    resp = mock.Mock()
+    resp.content = body.encode("utf-8")
+    resp.raise_for_status = lambda: None
+    return resp
+
+
+class TestRss(unittest.TestCase):
+    def test_parses_rss2(self):
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(RSS)):
+            items = fetch_rss(SRC)
+        self.assertEqual(len(items), 4)
+        self.assertEqual(items[0].title, "Huawei unveils new 5nm chip made by SMIC")
+        self.assertIn("produced domestically", items[0].summary)
+        self.assertNotIn("<p>", items[0].summary)
+        self.assertNotIn("utm_source", items[0].url)
+        self.assertIsNotNone(items[0].published)
+
+    def test_parses_atom(self):
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(ATOM)):
+            items = fetch_rss(SRC)
+        self.assertEqual(len(items), 1)
+        self.assertEqual(items[0].url, "https://example.org/robot")
+        self.assertEqual(items[0].published.year, 2026)
+
+
+class TestFilter(unittest.TestCase):
+    def setUp(self):
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(RSS)):
+            self.items = fetch_rss(SRC)
+
+    def test_prefilter_drops_junk_and_scores(self):
+        kept = relevance.prefilter(self.items, log=lambda *a: None)
+        titles = [i.title for i in kept]
+        self.assertTrue(any("Huawei" in t for t in titles))
+        self.assertFalse(any("lottery" in t.lower() for t in titles))
+        self.assertFalse(any("bakery" in t.lower() for t in titles))
+        self.assertGreater(kept[0].score, 5)          # huawei + smic + chip
+        self.assertIn("huawei", kept[0].matched)
+
+    def test_non_china_source_needs_marker(self):
+        item = Item(id="x", title="Nvidia ships new GPU", summary="US only.",
+                    url="https://e.com/x", source_id="s", source_name="S",
+                    china_native=False)
+        self.assertFalse(relevance.about_china(item))
+
+
+class TestDedupe(unittest.TestCase):
+    def test_similar_headlines_collapse(self):
+        from bot.collect import _dedupe
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(RSS)):
+            items = fetch_rss(SRC)
+        kept = _dedupe(items[:2], [], 0.55)
+        self.assertEqual(len(kept), 1, "две заметки об одном событии должны схлопнуться")
+
+    def test_seen_url_is_skipped(self):
+        from bot.collect import _dedupe
+        with mock.patch("bot.sources.rss.requests.get", return_value=_fake_get(RSS)):
+            items = fetch_rss(SRC)
+        seen = [{"id": items[0].id, "title": items[0].title, "url": items[0].url}]
+        kept = _dedupe([items[0]], seen, 0.55)
+        self.assertEqual(kept, [])
+
+    def test_different_stories_survive(self):
+        a = Item(id="1", title="BYD launches solid-state battery pilot line",
+                 summary="", url="https://e.com/1", source_id="s", source_name="S")
+        b = Item(id="2", title="Alibaba open-sources a new Qwen model",
+                 summary="", url="https://e.com/2", source_id="s", source_name="S")
+        from bot.collect import _dedupe
+        self.assertEqual(len(_dedupe([a, b], [], 0.55)), 2)
+
+
+class TestRender(unittest.TestCase):
+    def test_tags_and_source_link(self):
+        data = {"publish": True, "score": 8, "title": "t",
+                "text": "Huawei показала чип.", "tags": ["ИИ", "#чипы"]}
+        out = render(data, "https://example.com/a?x=1", "TechNode")
+        self.assertIn("#ИИ", out)
+        self.assertIn("#чипы", out)
+        self.assertIn('<a href="https://example.com/a?x=1">Источник: TechNode</a>', out)
+
+    def test_escapes_source_name(self):
+        data = {"publish": True, "score": 8, "title": "t", "text": "x", "tags": []}
+        out = render(data, "https://e.com", "A & B <news>")
+        self.assertIn("A &amp; B &lt;news&gt;", out)
+
+
+class TestPublishWindow(unittest.TestCase):
+    def test_window_and_gap(self):
+        from bot import publish
+        with mock.patch.dict(publish.PUBLISHING, {"timezone_offset": 3, "window_start": 9,
+                                                  "window_end": 22, "min_gap_minutes": 90}):
+            with mock.patch("bot.publish.local_now",
+                            return_value=datetime(2026, 9, 21, 3, 0)):
+                self.assertFalse(publish.in_window())
+            with mock.patch("bot.publish.local_now",
+                            return_value=datetime(2026, 9, 21, 14, 0)):
+                self.assertTrue(publish.in_window())
+
+            recent = {"last_at": util.iso(NOW - timedelta(minutes=10))}
+            self.assertFalse(publish.gap_ok(recent))
+            old = {"last_at": util.iso(NOW - timedelta(hours=5))}
+            self.assertTrue(publish.gap_ok(old))
+            self.assertTrue(publish.gap_ok({"last_at": None}))
+
+    def test_daily_limit_counts_today(self):
+        from bot import publish
+        published = {"items": [{"at": util.iso(NOW)}, {"at": util.iso(NOW - timedelta(days=2))}]}
+        with mock.patch.dict(publish.PUBLISHING, {"timezone_offset": 3}):
+            self.assertEqual(publish.today_count(published), 1)
+
+
+class TestUtil(unittest.TestCase):
+    def test_similarity(self):
+        self.assertGreater(util.similarity("Huawei unveils 5nm chip",
+                                           "Huawei presents 5nm chip"), 0.55)
+        self.assertLess(util.similarity("BYD battery plant",
+                                        "Alibaba cloud earnings"), 0.3)
+
+    def test_chinese_titles_compare(self):
+        self.assertGreater(util.similarity("华为发布新款芯片", "华为发布新芯片"), 0.5)
+
+
+if __name__ == "__main__":
+    unittest.main(verbosity=2)

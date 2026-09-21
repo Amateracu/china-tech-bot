@@ -1,0 +1,126 @@
+# Источники новостей. enabled: false — временно выключить, не удаляя.
+# lang: en / zh / ru — влияет на подсказку модели при рерайте.
+# china_native: true — источник сам по себе про Китай, отдельный фильтр «про Китай?» не нужен.
+# weight — множитель к итоговому score (1.0 = обычный).
+
+rss:
+  - id: technode
+    name: TechNode
+    url: https://technode.com/feed/
+    lang: en
+    china_native: true
+    weight: 1.3
+    enabled: true
+
+  - id: scmp_tech
+    name: SCMP Tech
+    url: https://www.scmp.com/rss/36/feed
+    lang: en
+    china_native: true
+    weight: 1.2
+    enabled: true
+
+  - id: pandaily
+    name: Pandaily
+    url: https://pandaily.com/feed/
+    lang: en
+    china_native: true
+    weight: 1.2
+    enabled: true
+
+  - id: cnevpost
+    name: CnEVPost
+    url: https://cnevpost.com/feed/
+    lang: en
+    china_native: true
+    weight: 1.0
+    enabled: true
+
+  - id: carnewschina
+    name: CarNewsChina
+    url: https://carnewschina.com/feed/
+    lang: en
+    china_native: true
+    weight: 0.9
+    enabled: true
+
+  - id: trendforce
+    name: TrendForce
+    url: https://www.trendforce.com/news/feed/
+    lang: en
+    china_native: false
+    weight: 1.0
+    enabled: true
+
+  - id: restofworld
+    name: Rest of World
+    url: https://restofworld.org/feed/latest
+    lang: en
+    china_native: false
+    weight: 0.9
+    enabled: true
+
+  # --- китайские первоисточники: новости выходят раньше западных ---
+  - id: ithome
+    name: IT之家
+    url: https://www.ithome.com/rss/
+    lang: zh
+    china_native: true
+    weight: 1.1
+    enabled: true
+
+  - id: cnbeta
+    name: cnBeta
+    url: https://www.cnbeta.com.tw/backend.php
+    lang: zh
+    china_native: true
+    weight: 1.0
+    enabled: true
+
+  - id: kr36
+    name: 36氪
+    url: https://36kr.com/feed
+    lang: zh
+    china_native: true
+    weight: 0.9
+    enabled: true
+
+  # --- выключено по умолчанию: часто режет ботов / нестабильно ---
+  - id: nikkei_asia
+    name: Nikkei Asia
+    url: https://asia.nikkei.com/rss/feed/nar
+    lang: en
+    china_native: false
+    weight: 0.9
+    enabled: false
+
+  - id: reddit_china_irl
+    name: r/China_irl
+    url: https://www.reddit.com/r/China_irl/.rss
+    lang: en
+    china_native: true
+    weight: 0.6
+    enabled: false
+
+# Публичные Telegram-каналы (читаются через веб-превью t.me/s/<username>, без API-аккаунта).
+# Укажите username без @. Это для мониторинга повестки — тексты всё равно переписываются заново.
+telegram:
+  - id: tg_example
+    name: Пример
+    username: durov
+    lang: en
+    china_native: false
+    weight: 0.7
+    enabled: false
+
+# Hacker News через Algolia API — ловит то, что обсуждают инженеры.
+hackernews:
+  enabled: true
+  weight: 0.8
+  min_points: 40
+  queries:
+    - China chip
+    - China AI
+    - Huawei
+    - DeepSeek
+    - Chinese semiconductor
