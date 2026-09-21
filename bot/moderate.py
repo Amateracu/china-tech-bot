@@ -185,11 +185,17 @@ def _fetch_news(chat_id, queue, how_many=5):
         log(f"  ! сбор по кнопке упал: {exc}")
         send_message(chat_id, f"Не получилось: {esc(str(exc))[:200]}", reply_markup=MENU)
         return
+    report = getattr(collect_main, "last_report", {}) or {}
+    log(f"  🔎 по кнопке прислано карточек: {sent}")
+    if sent >= how_many:
+        return                      # пришло сколько просили — лишнего не пишем
     if sent:
-        log(f"  🔎 по кнопке прислано карточек: {sent}")
+        tail = f"Прислал {sent} — больше новых не нашлось."
     else:
-        send_message(chat_id, "Ничего нового не нашлось — всё свежее уже показывал.",
-                     reply_markup=MENU)
+        tail = "Ничего нового: всё свежее уже показывал раньше."
+    if report.get("skipped_low"):
+        tail += f" Ещё {report['skipped_low']} отсеял как слабые."
+    send_message(chat_id, tail, reply_markup=MENU)
 
 
 def handle_message(msg, queue, approved):

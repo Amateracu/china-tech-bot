@@ -90,6 +90,7 @@ def main(limit: int = None, force: bool = False) -> int:
     queued_ids = {q["id"] for q in queue["items"]}
 
     sent = 0
+    skipped_low = 0
     for item in items:
         if sent >= max_per_run:
             break
@@ -107,6 +108,7 @@ def main(limit: int = None, force: bool = False) -> int:
         )
 
         if not data.get("publish") or float(data.get("score", 0)) < min_llm_score:
+            skipped_low += 1
             log(f"  – пропуск ({data.get('score')}): {item.title[:60]} — {data.get('reason', '')[:80]}")
             continue
 
@@ -161,6 +163,11 @@ def main(limit: int = None, force: bool = False) -> int:
         store.save("queue.json", queue)
 
     log(f"Готово. Отправлено на модерацию: {sent}. В очереди всего: {len(queue['items'])}")
+    main.last_report = {
+        "sent": sent,
+        "candidates": len(items),
+        "skipped_low": skipped_low,
+    }
     return sent
 
 

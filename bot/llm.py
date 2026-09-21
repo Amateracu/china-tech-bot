@@ -24,6 +24,7 @@ def _system_prompt() -> str:
         length=CHANNEL.get("length", "600-900 символов"),
         emoji=CHANNEL.get("emoji", "без эмодзи"),
         hashtags=CHANNEL.get("hashtags", 2),
+        rubrics="\n".join(f"  {r}" for r in CHANNEL.get("rubrics") or []),
     )
 
 
