@@ -59,11 +59,18 @@ def _moderation_card(item, data, post_text, media_kind="") -> str:
     return head + post_text
 
 
-def main() -> int:
+def main(limit: int = None, force: bool = False) -> int:
     require("TELEGRAM_BOT_TOKEN", "MODERATOR_CHAT_ID", "DEEPSEEK_API_KEY")
 
     seen = store.load("seen.json")
     queue = store.load("queue.json")
+
+    # не заваливаем личку: пока не разобрана накопленная очередь, новое не собираем
+    max_queue = int(PIPELINE.get("max_queue", 6))
+    if not force and len(queue["items"]) >= max_queue:
+        log(f"В очереди на модерации {len(queue['items'])} — это предел ({max_queue}), "
+            f"сбор пропущен. Разберите карточки, и сбор возобновится сам.")
+        return 0
 
     log("Сбор источников:")
     raw = collect_all(SOURCES, log=log)
@@ -78,7 +85,7 @@ def main() -> int:
     items = _dedupe(items, seen["items"], float(PIPELINE.get("dedupe_similarity", 0.55)))
     log(f"После дедупликации: {len(items)}")
 
-    max_per_run = int(PIPELINE.get("max_per_run", 5))
+    max_per_run = int(limit or PIPELINE.get("max_per_run", 5))
     min_llm_score = float(PIPELINE.get("min_llm_score", 6))
     queued_ids = {q["id"] for q in queue["items"]}
 
@@ -154,7 +161,7 @@ def main() -> int:
         store.save("queue.json", queue)
 
     log(f"Готово. Отправлено на модерацию: {sent}. В очереди всего: {len(queue['items'])}")
-    return 0
+    return sent
 
 
 if __name__ == "__main__":

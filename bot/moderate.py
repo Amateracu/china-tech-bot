@@ -155,38 +155,90 @@ def handle_callback(cb, queue, approved):
         _ack(cb["id"], "Неизвестная команда")
 
 
+MENU = {
+    "keyboard": [
+        [{"text": "🔎 5 новостей"}],
+        [{"text": "📋 Очередь"}, {"text": "⏭ Опубликовать"}],
+    ],
+    "resize_keyboard": True,
+    "is_persistent": True,
+}
+
+NEWS_WORDS = ("/news", "🔎 5 новостей", "новости", "/новости")
+QUEUE_WORDS = ("/queue", "📋 Очередь")
+NEXT_WORDS = ("/next", "⏭ Опубликовать")
+
+
+def _fetch_news(chat_id, queue, how_many=5):
+    """Сходить за новостями прямо сейчас, по нажатию кнопки.
+
+    collect пишет очередь на диск сам, поэтому после него обязательно
+    перечитываем её в тот же объект — иначе воркер затрёт свежие карточки
+    своей устаревшей копией.
+    """
+    send_message(chat_id, "Ищу новости… это займёт полминуты.", reply_markup=MENU)
+    try:
+        from .collect import main as collect_main
+        sent = collect_main(limit=how_many, force=True)
+        queue["items"] = store.load("queue.json")["items"]
+    except Exception as exc:
+        log(f"  ! сбор по кнопке упал: {exc}")
+        send_message(chat_id, f"Не получилось: {esc(str(exc))[:200]}", reply_markup=MENU)
+        return
+    if sent:
+        log(f"  🔎 по кнопке прислано карточек: {sent}")
+    else:
+        send_message(chat_id, "Ничего нового не нашлось — всё свежее уже показывал.",
+                     reply_markup=MENU)
+
+
 def handle_message(msg, queue, approved):
     text = (msg.get("text") or "").strip()
     chat_id = (msg.get("chat") or {}).get("id")
-    if not text.startswith("/"):
+    if not text:
         return
+    low = text.lower()
 
-    if text.startswith("/start") or text.startswith("/id"):
-        send_message(chat_id, f"Ваш chat_id: <code>{chat_id}</code>\n"
-                              f"Впишите его в секрет <code>MODERATOR_CHAT_ID</code>.")
-    elif text.startswith("/queue"):
+    if text.startswith("/start"):
+        send_message(
+            chat_id,
+            "Готов к работе.\n\n"
+            "<b>🔎 5 новостей</b> — сходить за свежими прямо сейчас\n"
+            "<b>📋 Очередь</b> — что накопилось\n"
+            "<b>⏭ Опубликовать</b> — отправить в канал следующий одобренный\n\n"
+            f"Ваш chat_id: <code>{chat_id}</code>",
+            reply_markup=MENU,
+        )
+    elif text in NEWS_WORDS or low in NEWS_WORDS:
+        _fetch_news(chat_id, queue)
+    elif text in QUEUE_WORDS or low.startswith("/queue"):
         published = store.load("published.json")
         send_message(
             chat_id,
             f"На модерации: <b>{len(queue['items'])}</b>\n"
             f"Одобрено, ждёт слота: <b>{len(approved['items'])}</b>\n"
-            f"Опубликовано всего: <b>{len(published['items'])}</b>\n"
-            f"Последний пост: {esc(published.get('last_at') or '—')}",
+            f"Опубликовано всего: <b>{len(published['items'])}</b>",
+            reply_markup=MENU,
         )
-    elif text.startswith("/next"):
+    elif text in NEXT_WORDS or low.startswith("/next"):
         if not approved["items"]:
-            send_message(chat_id, "Очередь публикации пуста.")
+            send_message(chat_id, "Очередь публикации пуста.", reply_markup=MENU)
             return
         post = approved["items"].pop(0)
-        publish_now(post)
-        send_message(chat_id, f"Опубликовано: {esc(post.get('title', ''))}")
-    elif text.startswith("/help"):
-        send_message(
-            chat_id,
-            "/queue — что в очередях\n"
-            "/next — опубликовать следующий одобренный пост прямо сейчас\n"
-            "/id — показать chat_id",
-        )
+        try:
+            publish_now(post)
+        except RuntimeError as exc:
+            approved["items"].insert(0, post)
+            send_message(chat_id, f"Не опубликовалось: {esc(str(exc))[:200]}",
+                         reply_markup=MENU)
+            return
+        send_message(chat_id, f"Опубликовано: {esc(post.get('title', ''))}",
+                     reply_markup=MENU)
+    elif text.startswith("/id"):
+        send_message(chat_id, f"Ваш chat_id: <code>{chat_id}</code>", reply_markup=MENU)
+    elif text.startswith("/"):
+        send_message(chat_id, "Не знаю такой команды. Пользуйтесь кнопками ниже.",
+                     reply_markup=MENU)
 
 
 def main() -> int:

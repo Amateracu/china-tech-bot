@@ -45,7 +45,7 @@ jobs:
           MODERATOR_CHAT_ID: ${{ secrets.MODERATOR_CHAT_ID }}
           DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
           WORKER_MINUTES: "330"
-          COLLECT_HOURS: "8,11,14,17,20"
+          COLLECT_HOURS: ""          # пусто = новости только по кнопке в боте
           GITHUB_REF_NAME: ${{ github.ref_name }}
         run: python -m bot.worker
 
