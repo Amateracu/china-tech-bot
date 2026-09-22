@@ -35,6 +35,24 @@
    "message_id": 39,
    "created_at": "2026-09-22T07:18:22.656971+00:00",
    "rewrites": 0
+  },
+  {
+   "id": "0dcb4a2d16b2",
+   "title": "Tencent Hunyuan выпустил модель генерации изображений Hy Image3.5 preview",
+   "text": "🧠 Tencent Hunyuan представил модель генерации изображений Hy Image3.5 preview — она поддерживает текст-в-изображение, изображение-в-изображение и многораундовое создание по диалогу.\n\nПо внутренним слепым тестам GSB среди нескольких сотен профессиональных дизайнеров модель на 30% лучше Hy Image3.0, на уровне Seedream 5.0 pro и немного превосходит Nano-Banana Pro и Qwen-Image-3.0 Pro. GSB — метод парных сравнений, где оценщик не знает, какая модель сгенерировала картинку.\n\nМодель уже два месяца постепенно раскатывается в приложении Yuanbao: объём запросов на генерацию вырос более чем на 50%. Цена через API Tencent Cloud — 0,15 юаня за 2K-изображение, в международной версии — $0,024, платят только за выходные картинки.\n\nДоступна в Yuanbao, ima, WorkRally, OnSolo, Miora, WorkBuddy, а также через облачные платформы MPS и VOD. Поддерживает до 5 референсных изображений за раз и разрешение до 2K.\n\n#ИИ #Tencent\n\n<a href=\"https://www.ithome.com/1/005/589.htm\">Источник: IT之家</a>",
+   "url": "https://www.ithome.com/1/005/589.htm",
+   "source_name": "IT之家",
+   "source_id": "ithome",
+   "llm_score": 7,
+   "raw_title": "腾讯混元 Hy Image3.5 preview 发布：支持文生图与多轮对话创作，已上线元宝、ima 等应用",
+   "raw_summary": "IT之家 9 月 22 日消息，腾讯混元团队今日宣布推出 Hy Image3.5 preview 模型。腾讯称该模型面向专业级生图创作，支持文生图、图生图和多轮对话创作。 腾讯称，该模型经过内部数百名专业设计师 GSB 盲测，对比 Hy Image3.0 提升 30%，与 Seedream 5.0 pro 持平，略优于 Nano-Banana Pro 和 Qwen-Image-3.0 Pro。 IT之家注：GSB 盲测是一种成对比较评测方法，评测者在不知道模型来源的情况下判断生成效果优劣。 腾讯表示，Hy Image3.5 preview 已在元宝 App 提前 2 个月逐步灰度上线和内测，生图整体请求量提升超过 50%。 定价方面，腾讯云 API 2K 图像定价为 0.15 元 / 张图，腾讯云国际版为 0.024 美元 / 张图，仅对输出图片收费。企业和开发者可通过腾讯云 TokenHub 调用 API。 目前，该模型已上线元宝、WorkRally、OnSolo、Miora、WorkBuddy、ima 等应用，并接入腾讯云媒体处理 MPS、云点播 VOD 平台。 元宝可免费使用人像编辑、智能 P 图、旅游规划图、知识信息图等场景，进入“创作”体验。ima 可通过 copilot 将知识库转为可视化网页、PPT 和图片。Miora、WorkRally、OnSolo 面向专业美学与影视物料创作，限时两周免费体验。 能力方面，Hy Image3.5 preview 支持文生图和图生图，单次最多上传 5 张图作为参考，支持多轮对话创作，可基于历史上下文连续创作和编辑，支持多种尺寸比例输出，最高 2K 分辨率。 腾讯称，该模型既能服务日常修图、人像美化、知识卡片等场景，也能支撑商业海报、剧集分镜、影视物料、UI 设计、创意插画、品牌视觉、电商物料等专业场景。 腾讯混元称，自 2 月重建基础设施以来，混元大模型保持平均每两个月迭代一次大版本的节奏，并通过 preview 先行、正式版跟进的方式，将真实反馈引入研发过程。 参考资料： 混元官网： https://aistudio.tencent.com/ 腾讯云 TokenHub： https://console.cloud.tencent.com/ tokenhub / models / detail?modelId=hy-image-v3.5-preview",
+   "lang": "zh",
+   "image_url": "https://img.ithome.com/newsuploadfiles/2026/9/3bd0cfc2-8afc-4741-8272-f31c6f3daca7.jpg",
+   "media_kind": "",
+   "mod_is_photo": false,
+   "message_id": 41,
+   "created_at": "2026-09-22T07:18:28.877673+00:00",
+   "rewrites": 0
   }
  ]
 }
