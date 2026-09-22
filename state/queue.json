@@ -295,24 +295,6 @@
    "rewrites": 0
   },
   {
-   "id": "61ef337e58e0",
-   "title": "Xiaomi выложила в открытый доступ модели MiMo-V2.6",
-   "text": "🧠 Xiaomi открыла исходный код серии моделей MiMo-V2.6, включая нативные мультимодальные MiMo-V2.6-Pro и MiMo-V2.6-Flash.\n\nВместе с ними компания выложила дистиллированную MiMo-V2.6-Distill-Qwen-9B и материалы по обучению с подкреплением. По приведённым Xiaomi данным, MiMo-V2.6-Pro набрала 46 баллов в Artificial Analysis Intelligence Index — выше Kimi K3 (44) и GLM-5.3 (45).\n\nОткрытые веса и исследовательские материалы по RL — ставка на то, что внешние разработчики будут дообучать модели под свои задачи. Для Xiaomi это способ закрепиться в числе заметных игроков на китайском ИИ-рынке, где открытость стала нормой конкуренции.\n\n#ИИ #Xiaomi\n\n<a href=\"https://technode.com/2026/09/22/xiaomi-open-sources-mimo-v2-6-models-after-scaling-reinforcement-learning\">Источник: TechNode</a>",
-   "url": "https://technode.com/2026/09/22/xiaomi-open-sources-mimo-v2-6-models-after-scaling-reinforcement-learning",
-   "source_name": "TechNode",
-   "source_id": "technode",
-   "llm_score": 7,
-   "raw_title": "Xiaomi open-sources MiMo-V2.6 models after scaling reinforcement learning",
-   "raw_summary": "Xiaomi has released and open-sourced the MiMo-V2.6 series, including the native multimodal MiMo-V2.6-Pro and MiMo-V2.6-Flash models. Xiaomi also released MiMo-V2.6-Distill-Qwen-9B and research resources for reinforcement learning. MiMo-V2.6-Pro scored 46 on the Artificial Analysis Intelligence Index, ahead of Kimi K3 at 44 and GLM-5.3 at 45, according to Xiaomi’s cited comparison. The company described it as […]",
-   "lang": "en",
-   "image_url": "https://i0.wp.com/technode.com/wp-content/uploads/2026/09/xiaomi.png?fit=1024%2C461&amp;ssl=1",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 50,
-   "created_at": "2026-09-22T08:30:00.900494+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "ad4509d70e86",
    "title": "Alibaba выпустила настольного робота QwenNote Eva за 899 юаней",
    "text": "🔲 Alibaba на конференции Yunqi представила QwenNote Eva — настольного робота-ассистента за 899 юаней (около 12,5 тыс. руб.), продажи стартуют в тот же вечер.\n\nУстройство работает на базе QwenWork (千问办公) и подключено к экосистеме DingTalk: голосовые команды, отправка сообщений и звонков, управление встречами и расписанием, AI-запись совещаний. Схема — «команда → выполнение на нескольких устройствах → озвучивание результата»; итог обработки выводится на ПК. Экрана у робота нет.\n\nАппаратно: 124,8×124,8×179,3 мм, около 700 г, трёхосевой моторный подвес (поворот ±180°, наклон +15°, ±20°), RGB-подсветка, Bluetooth 5.4. Зарядка — GaN до 65 Вт, два Type-C и магнитная беспроводная, совместимость с Android, iOS и HarmonyOS.\n\nГолос и эмоции — на qwen-audio: более 100 выражений, три сменных «глаза», распознавание взгляда и долговременная память. Ставка на то, что ассистент встраивается в рабочий процесс, а не отвечает на отдельные вопросы.\n\n#чипы #Alibaba\n\n<a href=\"https://www.ithome.com/1/005/803.htm\">Источник: IT之家</a>",
