@@ -1,3 +1,40 @@
 {
- "items": []
+ "items": [
+  {
+   "id": "a792ac4dd7ed",
+   "title": "DeepSeek переводит обучение моделей на чипы Huawei",
+   "text": "🔲 Глава DeepSeek Лян Вэньфэн заявил инвесторам, что обучение следующих моделей на чипах Huawei и других китайских ускорителях — приоритетная задача.\n\nПоставки тренировочных чипов Huawei ожидаются в четвёртом квартале 2026 — первом квартале 2027 года. То есть речь пока не о работающей инфраструктуре, а о плане на будущее.\n\nКонтекст: DeepSeek — одна из немногих китайских лабораторий, чьи модели конкурируют с американскими. До сих пор обучение шло в основном на ускорителях Nvidia, доступ к которым ограничен экспортным контролем США. Переход на национальное железо — способ снять эту зависимость, но он упирается в готовность Huawei нарастить поставки.\n\nСроки сдвинуты далеко вперёд, так что заявление стоит читать как декларацию курса, а не как факт о текущих мощностях.\n\n#чипы #Huawei\n\n<a href=\"https://pandaily.com/deepseek-liang-wenfeng-huawei-domestic-chips-training-q4-2026\">Источник: Pandaily</a>",
+   "url": "https://pandaily.com/deepseek-liang-wenfeng-huawei-domestic-chips-training-q4-2026",
+   "source_name": "Pandaily",
+   "source_id": "pandaily",
+   "llm_score": 8,
+   "raw_title": "DeepSeek's Liang: Next Models Must Train on Huawei and Domestic Chips",
+   "raw_summary": "DeepSeek CEO Liang Wenfeng told investors that training next models on Huawei and domestic chips is a top priority, with Huawei training-chip deliveries eyed for Q4 2026 to Q1 2027.",
+   "lang": "en",
+   "image_url": "https://cms-image.pandaily.com/1/deepseek_liang_huawei_training_ef773ae8f3.png",
+   "media_kind": "",
+   "mod_is_photo": false,
+   "message_id": 38,
+   "created_at": "2026-09-22T07:18:19.507913+00:00",
+   "rewrites": 0
+  },
+  {
+   "id": "4783965b5b33",
+   "title": "Alibaba представила Qwen Intelligence для AI-смартфонов",
+   "text": "🧠 Alibaba представила Qwen Intelligence — платформу агентных функций для смартфонов, первым её получит Honor Magic9.\n\nРешение анонсировано на конференции Yunqi в Ханчжоу. Qwen Intelligence — это набор инструментов на базе модели Qwen, который позволяет телефону выполнять сложные задачи сразу в нескольких приложениях, а не только внутри одного сервиса.\n\nHonor Magic9 станет первым серийным устройством с этой платформой, презентация — 28 сентября в Пекине. Заявлена MagicOS 11. По данным Honor, новый ассистент YOYO умеет выстраивать цепочки длиной более 100 шагов, понимание намерений — 91,8%, точность сложных задач — 87%, замкнутый цикл выполнения — 90%. В системе 700 инструментов и более 500 совместимых навыков.\n\nСотрудничество Alibaba и Honor началось в июле 2026 года, тогда платформу впервые показали на прототипе Honor Robot Phone. Теперь речь идёт о серийном запуске.\n\n#ИИ #Alibaba\n\n<a href=\"https://www.ithome.com/1/005/644.htm\">Источник: IT之家</a>",
+   "url": "https://www.ithome.com/1/005/644.htm",
+   "source_name": "IT之家",
+   "source_id": "ithome",
+   "llm_score": 7,
+   "raw_title": "行业首个系统级 Agent Harness 架构：“千问手机”荣耀 Magic9 系列首发搭载阿里 Qwen Intelligence，9 月 28 日发布",
+   "raw_summary": "IT之家 9 月 22 日消息，阿里巴巴“2026 云栖大会”于 9 月 22 日-24 日在杭州举行，IT之家亲临现场，将为大家持续带来相关报道。 今日，阿里宣布推出 AI 手机全栈解决方案 Qwen Intelligence。据透露，将于 9 月 28 日发布的荣耀 Magic9 系列将成为首批搭载该方案的正式机型。除此之外， 荣耀 Robot Phone 也将提供支持。 阿里介绍称，Qwen Intelligence 专为手机场景深度优化，为合作伙伴提供基于千问大模型的 Agent 技术平台，让手机能够更可靠地完成跨应用的复杂任务。荣耀 Robot Phone 也同步支持该方案。 双方合作可追溯至 2026 年 7 月。在 2026 世界人工智能大会期间，阿里巴巴宣布联合荣耀基于千问大模型共创面向手机场景的解决方案，该方案已在荣耀 Robot Phone 落地。此次发布的 Qwen Intelligence 是双方合作的进一步深化。 基于 Qwen Intelligence 与荣耀MagicOS，双方共同打造了面向下一代 AI 手机的垂域模型和解决方案。荣耀 CEO 李健此前介绍，新一代 YOYO 可执行的超长任务步数已达到 100 步以上，综合意图理解处理能力达到 91.8%，复杂任务准确率 87%，任务整体执行闭环率达到 90%。系统内置 700 个工具，兼容 500 个以上技能，覆盖 40 多种条件任务触发。 荣耀 Magic9 系列定档 9 月 28 日在北京发布，将首发搭载 MagicOS 11，该系列在外观、影像、AI 及操作系统等方面均迎来更新。敬请期待。 相关阅读： 《 荣耀 Magic9 系列手机搭载第三代自研射频增强芯片 C3，支持 356 个频段组合智能切换 》 《 荣耀 Magic9 系列手机搭载行业独家双 3D 生物识别，9 月 28 日发布 》 《 荣耀 Magic9 Pro Max 手机现身 Geekbench，骁龙 8 Elite Gen6 Pro（SM8975）芯片 》 《 荣耀 Magic9 系列手机官宣搭载自研影像芯片荣耀驭光 H1：RAW 域视频无损降噪、信噪比提升 8dB，6nm 工艺 》 《 荣耀 AgenticOS 亮相，10 月面向 Magic9 系列用户开放尝鲜招募与推送 》",
+   "lang": "zh",
+   "image_url": "https://img.ithome.com/newsuploadfiles/2026/9/812faba6-e481-4178-a03d-3d72288b99dd.jpg",
+   "media_kind": "",
+   "mod_is_photo": false,
+   "message_id": 39,
+   "created_at": "2026-09-22T07:18:22.656971+00:00",
+   "rewrites": 0
+  }
+ ]
 }
