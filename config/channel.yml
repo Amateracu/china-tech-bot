@@ -51,4 +51,4 @@ publishing:
   window_start: 9           # публикуем не раньше
   window_end: 22            # и не позже
   min_gap_minutes: 30       # минимальный интервал между постами
-  max_per_day: 6
+  max_per_day: 12           # при интервале 30 мин и окне 9-22 влезает до 26
