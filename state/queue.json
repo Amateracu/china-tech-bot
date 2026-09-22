@@ -259,24 +259,6 @@
    "rewrites": 0
   },
   {
-   "id": "591863a25453",
-   "title": "Alibaba показала свой самый мощный ИИ-чип и анонсировала модель на 10 трлн парам",
-   "text": "🧠 Alibaba представила ИИ-чип, который называет самым мощным в Китае, и заявила о планах обучить модель с числом параметров до 10 трлн.\n\nОб этом на ежегодной конференции Apsara в Ханчжоу рассказал председатель группы Джо Цай. По его словам, компания вкладывается в создание полноценного стека ИИ — от чипов до моделей и облака.\n\nЗаявка на 10 трлн параметров — на порядок больше, чем у большинства современных моделей. Это одновременно и про амбиции, и про инфраструктуру: такие масштабы требуют собственного железа, иначе обучение упирается в доступность чипов.\n\nAlibaba также подтвердила курс на «суперинтеллект» (ASI) как долгосрочную цель. Конкретные сроки, архитектура и производительность чипа пока не раскрыты.\n\n#ИИ #Alibaba\n\n<a href=\"https://www.scmp.com/tech/big-tech/article/3368338/alibaba-teases-10-trillion-parameter-model-debuts-chinas-most-powerful-ai-chip\">Источник: SCMP Tech</a>",
-   "url": "https://www.scmp.com/tech/big-tech/article/3368338/alibaba-teases-10-trillion-parameter-model-debuts-chinas-most-powerful-ai-chip",
-   "source_name": "SCMP Tech",
-   "source_id": "scmp_tech",
-   "llm_score": 8,
-   "raw_title": "Alibaba teases 10-trillion-parameter model, debuts ‘China’s most powerful’ AI chip",
-   "raw_summary": "Alibaba Group Holding has introduced what it called China’s most powerful artificial intelligence chip and teased plans to train an AI model with up to 10 trillion parameters, as top executives reaffirmed the tech giant’s ambition to pursue artificial superintelligence (ASI). Speaking at the company’s annual Apsara Conference in Hangzhou on Tuesday, group chairman Joe Tsai highlighted Alibaba’s commitment to building end-to-end capabilities. “Alibaba is firmly investing in building full-stack AI...",
-   "lang": "en",
-   "image_url": "https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2026/09/22/c16307a3-3557-4f36-8518-f07ce04631a9_049f1c1b.jpg?itok=FWmd1tzL&v=1790055213",
-   "media_kind": "",
-   "mod_is_photo": false,
-   "message_id": 48,
-   "created_at": "2026-09-22T08:29:53.309510+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "0b176b517e5e",
    "title": "Xpeng завершил аудит поставщиков для человекоподобного робота IRON",
    "text": "🤖 Xpeng завершил аудит供应链 и определил ключевых поставщиков комплектующих для человекоподобного робота IRON —量产 переходит в практическую фазу.\n\n22 сентября Xpeng провёл первый форум партнёров по поставкам для робототехники. Участвовали производители приводов, «ловких рук», сенсоров и ИИ-чипов. На мероприятии показали актуальные возможности робота: автономное движение, восприятие и принятие решений, естественное взаимодействие. Компания также обозначила технический облик,供应链 и график量产.\n\nПо словам участников, отрасль пока в ранней фазе, но путь к серийному производству уже выглядит определённым. Отдельно отмечается, что команда Tesla недавно тоже приезжала в Китай на аудит поставщиков — и у Xpeng с Tesla «высокая степень совпадения» по ключевым партнёрам.\n\nIRON должен выйти в量产 к концу 2026 года: сначала в магазинах и кампусах Xpeng, а в 2027-м — на рынках Китая и за рубежом. Tesla, по данным цепочки поставок, планирует выпустить около 50 тыс. Optimus уже в этом году.\n\n#роботы #Xpeng\n\n<a href=\"https://www.ithome.com/1/005/731.htm\">Источник: IT之家</a>",
