@@ -295,24 +295,6 @@
    "rewrites": 0
   },
   {
-   "id": "84ba4dd2ac18",
-   "title": "Alibaba: Qwen4 и новое поколение видеомоделей в обучении",
-   "text": "🧠 Alibaba подтвердила, что Qwen4 и следующее поколение видеомоделей находятся в разработке.\n\nОб этом компания сообщила на конференции Yunqi 2026 в Ханчжоу, где представила текущие результаты по большим моделям. В области LLM модель Qwen3.8-Max показала сильные результаты в программировании и офисных задачах: после релиза она заняла первое место в рейтинге агентных моделей Artificial Analysis Agentic и первое место во фронтенд-программировании CodeArena.\n\nКонкретных сроков выхода Qwen4 и видео-модели Alibaba не назвала — известно только, что обучение идёт. Это стандартный для китайских вендоров формат: анонс следующего поколения на фоне текущих достижений, чтобы удержать внимание разработчиков и не отдать инициативу конкурентам.\n\nДля рынка важнее другое: Qwen остаётся одной из самых активных открытых линеек моделей, и переход к четвёртой версии задаёт темп всей экосистеме китайских LLM.\n\n#ИИ #Alibaba\n\n<a href=\"https://www.cnbeta.com.tw/articles/tech/1579122.htm\">Источник: cnBeta</a>",
-   "url": "https://www.cnbeta.com.tw/articles/tech/1579122.htm",
-   "source_name": "cnBeta",
-   "source_id": "cnbeta",
-   "llm_score": 7,
-   "raw_title": "阿里巴巴：Qwen4和下代视频模型均在训练中",
-   "raw_summary": "2026云栖大会上，阿里巴巴公布大模型最新进展。在大语言模型LLM领域，Qwen3.8-Max在编程（Coding）和办公（Cowork）领域表现出色，发布后斩获Artificial Analysis Agentic智能体第一、CodeArena前端编程第一。 阅读全文",
-   "lang": "zh",
-   "image_url": "https://n.sinaimg.cn/finance/transform/162/w550h412/20260922/8de6-7c6686579ce419a688d021441b89e96e.jpg",
-   "media_kind": "",
-   "mod_is_photo": false,
-   "message_id": 58,
-   "created_at": "2026-09-22T09:57:52.508561+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "b2484a55d8e2",
    "title": "UBTECH начала массовые поставки человекоподобных роботов UWorld U1",
    "text": "🤖 UBTECH начала массовые поставки компаньонных человекоподобных роботов UWorld U1 китайским покупателям.\n\nРечь о трёх версиях — Lite, Pro и Ultra. Приём заказов открылся в июне, тогда компания собрала более 13 000 предзаказов.\n\nUBTECH — один из крупнейших китайских производителей гуманоидов, ранее известный промышленными моделями Walker. UWorld U1 — её ставка на потребительский сегмент: робот-компаньон для дома, а не для завода.\n\n13 000 заказов сами по себе немного, но важен переход от демонстраций к серийным отгрузкам. Именно на этом этапе обычно выясняется, готова ли экономика потребительского гуманоида к реальным объёмам.\n\n#роботы #UBTECH\n\n<a href=\"https://pandaily.com/ubtech-uworld-u1-mass-deliveries-consumer-humanoid\">Источник: Pandaily</a>",
@@ -346,24 +328,6 @@
    "mod_is_photo": true,
    "message_id": 60,
    "created_at": "2026-09-22T09:58:05.949113+00:00",
-   "rewrites": 0
-  },
-  {
-   "id": "5a9f40672c80",
-   "title": "vivo выпустила серию X500 Pro на чипе Dimensity 9600 Pro",
-   "text": "📱 vivo выпустила серию X500 Pro на новом чипе MediaTek Dimensity 9600 Pro, цена — от 6 499 юаней.\n\nВ линейку вошли две модели: X500 Pro с экраном 6,36 дюйма и X500 Pro Max с панелью 6,85 дюйма. По заявлению vivo, это первые смартфоны на флагманском чипсете Dimensity 9600 Pro.\n\nДля MediaTek это важный запуск: компания продолжает бороться за место во флагманском сегменте, где традиционно доминирует Qualcomm. Для vivo серия X500 Pro — попытка закрепиться в верхнем ценовом диапазоне.\n\n#гаджеты #vivo\n\n<a href=\"https://technode.com/2026/09/22/vivo-launches-x500-pro-series-with-dimensity-9600-pro-starting-at-rmb-6499\">Источник: TechNode</a>",
-   "url": "https://technode.com/2026/09/22/vivo-launches-x500-pro-series-with-dimensity-9600-pro-starting-at-rmb-6499",
-   "source_name": "TechNode",
-   "source_id": "technode",
-   "llm_score": 7,
-   "raw_title": "vivo launches X500 Pro series with Dimensity 9600 Pro, starting at RMB 6,499",
-   "raw_summary": "vivo has launched the X500 Pro series, comprising the X500 Pro and X500 Pro Max, with prices starting at RMB 6,499. The phones are the first to use MediaTek’s Dimensity 9600 Pro flagship chipset, according to vivo. The X500 Pro has a 6.36-inch display, while the Pro Max uses a 6.85-inch panel. Both models support […]",
-   "lang": "en",
-   "image_url": "https://i0.wp.com/technode.com/wp-content/uploads/2026/09/982c124d6b34b449c431c59ce59f5807.jpg?fit=1024%2C491&amp;ssl=1",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 61,
-   "created_at": "2026-09-22T09:58:18.771041+00:00",
    "rewrites": 0
   },
   {
