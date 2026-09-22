@@ -50,5 +50,5 @@ publishing:
   timezone_offset: 3        # Минск, UTC+3
   window_start: 9           # публикуем не раньше
   window_end: 22            # и не позже
-  min_gap_minutes: 90       # минимальный интервал между постами
+  min_gap_minutes: 30       # минимальный интервал между постами
   max_per_day: 6

@@ -144,6 +144,10 @@ def handle_callback(cb, queue, approved):
               reply_markup=keyboard(item_id))
         log(f"  ♻️ переписано: {entry.get('title', '')[:60]}")
 
+    elif action == "e":
+        _ack(cb["id"], "Жду новый текст")
+        start_edit(entry, chat_id, message_id)
+
     elif action == "d":
         _drop(queue, item_id)
         _ack(cb["id"], "Удалено")
@@ -153,6 +157,76 @@ def handle_callback(cb, queue, approved):
 
     else:
         _ack(cb["id"], "Неизвестная команда")
+
+
+SOURCE_MARK = '\n\n<a href="'
+EDIT_TTL_MINUTES = 30
+ALLOWED_TAGS = ("b", "i", "u", "s", "code")
+
+
+def split_body(text: str):
+    """Делит пост на тело и строку источника — правим только тело."""
+    if SOURCE_MARK in text:
+        body, _, tail = text.partition(SOURCE_MARK)
+        return body, SOURCE_MARK + tail
+    return text, ""
+
+
+def sanitize(text: str) -> str:
+    """Экранируем всё, кроме простых тегов оформления — иначе Telegram отвергнет пост."""
+    out = esc(text)
+    for tag in ALLOWED_TAGS:
+        out = out.replace(f"&lt;{tag}&gt;", f"<{tag}>").replace(f"&lt;/{tag}&gt;", f"</{tag}>")
+    return out
+
+
+def start_edit(entry, chat_id, message_id):
+    """Запоминаем, какую новость правим, и отдаём текущий текст для копирования."""
+    body, _ = split_body(entry.get("text", ""))
+    store.save("edit.json", {"awaiting": {
+        "item_id": entry["id"],
+        "chat_id": chat_id,
+        "card_message_id": message_id,
+        "at": now_utc().isoformat(),
+    }})
+    send_message(chat_id,
+                 "✏️ Пришлите новый текст поста следующим сообщением.\n"
+                 "Текущий — ниже, его удобно переслать себе и поправить.\n"
+                 "Отмена — <code>/cancel</code>.")
+    send_message(chat_id, body)
+
+
+def apply_edit(text, chat_id, queue):
+    """Пришёл новый текст: подставляем его в карточку. True, если правка применена."""
+    state = store.load("edit.json")
+    awaiting = state.get("awaiting")
+    if not awaiting or awaiting.get("chat_id") != chat_id:
+        return False
+
+    started = parse_iso(awaiting.get("at") or "")
+    if started and now_utc() - started > timedelta(minutes=EDIT_TTL_MINUTES):
+        store.save("edit.json", {"awaiting": None})
+        send_message(chat_id, "Правка отменена: прошло слишком много времени.",
+                     reply_markup=MENU)
+        return True
+
+    entry = _find(queue, awaiting["item_id"])
+    store.save("edit.json", {"awaiting": None})
+    if entry is None:
+        send_message(chat_id, "Эта новость уже обработана — правка не применена.",
+                     reply_markup=MENU)
+        return True
+
+    _, tail = split_body(entry.get("text", ""))
+    entry["text"] = sanitize(text.strip()) + tail
+    entry["edited"] = True
+    _edit(entry, chat_id, entry.get("message_id"),
+          _card_footer(entry, "✏️ поправлено вручную"),
+          reply_markup=keyboard(entry["id"]))
+    send_message(chat_id, "Готово, карточка обновлена.", reply_markup=MENU)
+    log(f"  ✏️ правка вручную: {entry.get('title', '')[:60]}")
+    return True
+
 
 
 MENU = {
@@ -204,6 +278,16 @@ def handle_message(msg, queue, approved):
     if not text:
         return
     low = text.lower()
+
+    if low == "/cancel":
+        store.save("edit.json", {"awaiting": None})
+        send_message(chat_id, "Отменено.", reply_markup=MENU)
+        return
+
+    # текст, присланный после кнопки «Править», заменяет пост
+    if text not in NEWS_WORDS and text not in QUEUE_WORDS and text not in NEXT_WORDS \
+            and not text.startswith("/") and apply_edit(text, chat_id, queue):
+        return
 
     if text.startswith("/start"):
         send_message(

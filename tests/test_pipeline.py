@@ -345,6 +345,30 @@ class TestModerationRobustness(unittest.TestCase):
         self.assertEqual(approved["items"], [])
 
 
+class TestManualEdit(unittest.TestCase):
+    """Ручная правка: тело меняется, ссылка на источник и безопасность сохраняются."""
+
+    def test_split_keeps_source_line(self):
+        from bot.moderate import split_body
+        text = 'Тело поста.\n\n<a href="https://e.com">Источник: S</a>'
+        body, tail = split_body(text)
+        self.assertEqual(body, "Тело поста.")
+        self.assertIn("Источник: S", tail)
+
+    def test_split_without_source(self):
+        from bot.moderate import split_body
+        body, tail = split_body("Только тело")
+        self.assertEqual((body, tail), ("Только тело", ""))
+
+    def test_sanitize_keeps_simple_tags_only(self):
+        from bot.moderate import sanitize
+        out = sanitize("<b>жирный</b> и <script>alert(1)</script> и 5 < 7")
+        self.assertIn("<b>жирный</b>", out)
+        self.assertNotIn("<script>", out)
+        self.assertIn("&lt;script&gt;", out)
+        self.assertIn("5 &lt; 7", out)
+
+
 class TestUtil(unittest.TestCase):
     def test_similarity(self):
         self.assertGreater(util.similarity("Huawei unveils 5nm chip",

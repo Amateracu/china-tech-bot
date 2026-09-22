@@ -142,6 +142,9 @@ def keyboard(item_id: str):
             ],
             [
                 {"text": "♻️ Переписать", "callback_data": f"r:{item_id}"},
+                {"text": "✏️ Править", "callback_data": f"e:{item_id}"},
+            ],
+            [
                 {"text": "🗑 Удалить", "callback_data": f"d:{item_id}"},
             ],
         ]

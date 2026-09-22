@@ -11,6 +11,7 @@ DEFAULTS = {
     "published.json": {"items": [], "last_at": None},
     "offset.json": {"offset": 0},        # offset для getUpdates
     "worker.json": {"last_collect": None},  # когда воркер последний раз собирал новости
+    "edit.json": {"awaiting": None},     # какую новость модератор сейчас правит руками
 }
 
 
