@@ -349,24 +349,6 @@
    "rewrites": 0
   },
   {
-   "id": "d700eab93333",
-   "title": "Huawei представила архитектуру Peerium для миллиона процессоров",
-   "text": "🔲 Huawei представила вычислительную архитектуру Peerium, которая позволяет объединить до примерно миллиона процессоров в один компьютер.\n\nВ основе — вложенный BSP (Nested BSP), единая адресация памяти и пиринговое соединение UnifiedBus. По замыслу, это расширяет классическую фон-неймановскую однопроцессорную схему, а не заменяет её.\n\nМасштаб в миллион процессоров — это уровень суперкомпьютерных кластеров и крупных ИИ-дата-центров. Если архитектура работает так, как заявлено, она важна для Китая в условиях ограничений на доступ к западным ускорителям: ставка делается на масштабирование собственного железа.\n\nДеталей по производительности, срокам внедрения и конкретным системам в исходнике нет — следим за развитием.\n\n#чипы #Huawei\n\n<a href=\"https://pandaily.com/huawei-peerium-computing-architecture-nested-bsp-unifiedbus\">Источник: Pandaily</a>",
-   "url": "https://pandaily.com/huawei-peerium-computing-architecture-nested-bsp-unifiedbus",
-   "source_name": "Pandaily",
-   "source_id": "pandaily",
-   "llm_score": 7,
-   "raw_title": "Huawei Unveils Peerium Architecture: Nested BSP for Million-Processor Scale",
-   "raw_summary": "Huawei's Peerium Computing Architecture uses Nested BSP, unified memory addressing and UnifiedBus peer interconnect so up to about one million processors can operate as one computer, extending—not overthrowing—von Neumann single-machine design.",
-   "lang": "en",
-   "image_url": "https://cms-image.pandaily.com/1/huawei_peerium_architecture_6852029e94.jpg",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 65,
-   "created_at": "2026-09-22T10:59:52.949482+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "44bcfa9f95ad",
    "title": "Alibaba выпустила корпоративную платформу QwenWork и гаджет QwenNote A2",
    "text": "🧠 Alibaba на конференции Yunqi представила корпоративную платформу QwenWork для агентов и первый аппаратный продукт — QwenNote A2 за 1199 юаней.\n\nПлатформа строится вокруг четырёх блоков. «Корпоративный контекст» сжимает и структурирует данные из документов, переписок и бизнес-систем, чтобы агент работал с актуальной информацией о компании при низком расходе токенов. «Цифровые сотрудники» получают имя, отдел, руководителя и зону ответственности — их можно авторизовать, отключить, а все действия прослеживаются.\n\nВ «Пространстве协作» люди и агенты работают в одном окне: агенты общаются между собой и распределяют задачи, результаты остаются в пространстве. Через «Приложения» бизнес-системы и SaaS подключаются к QwenWork с сохранением интерфейса и данных, но с агентными функциями.\n\nQwenNote A2 — портативный рекордер: голосовая транскрипция и запуск задач QwenWork голосом. Аудио не хранится, остаются только текст и заметки. Отдельно идёт «Центр безопасности» — песочница, блокировка рискованных операций и восстановление после сбоев.\n\nДля Alibaba это попытка закрепить агентов в корпоративном контуре, а не только в чатах.\n\n#ИИ #Alibaba\n\n<a href=\"https://www.ithome.com/1/005/744.htm\">Источник: IT之家</a>",
