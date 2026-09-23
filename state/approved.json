@@ -1,24 +1,6 @@
 {
  "items": [
   {
-   "id": "f7a59717dd83",
-   "title": "Yangwang от BYD тизерит люксовый седан с твердотельным аккумулятором",
-   "text": "🔋 BYD показала тизер нового флагманского седана суббренда Yangwang — он должен стать конкурентом Rolls-Royce и, возможно, первой машиной компании с твердотельным аккумулятором.\n\nМодель займёт место нового люксового флагмана Yangwang. Других деталей — платформы, запаса хода, сроков выхода — в сообщении нет.\n\nТвердотельный аккумулятор остаётся одной из главных нерешённых задач для массового электромобиля: он обещает большую плотность энергии и безопасность, но пока не поставлен на конвейер ни у одного крупного производителя. Если BYD выведет такую батарею именно на флагман, это будет заявка на лидерство в премиум-сегменте.\n\n#электромобили #BYD\n\n<a href=\"https://carnewschina.com/2026/09/23/byds-yangwang-teases-upcoming-rolls-royce-rival-sedan-with-solid-state-battery\">Источник: CarNewsChina</a>",
-   "url": "https://carnewschina.com/2026/09/23/byds-yangwang-teases-upcoming-rolls-royce-rival-sedan-with-solid-state-battery",
-   "source_name": "CarNewsChina",
-   "source_id": "carnewschina",
-   "llm_score": 7,
-   "raw_title": "BYD’s Yangwang teases upcoming Rolls-Royce rival sedan with solid-state battery",
-   "raw_summary": "The sedan will act as Yangwang's new luxury flagship. It could also become BYD's first vehicle with a solid-state battery. The post BYD’s Yangwang teases upcoming Rolls-Royce rival sedan with solid-state battery appeared first on CarNewsChina.com .",
-   "lang": "en",
-   "image_url": "https://carnewschina.com/wp-content/uploads/2026/09/yw_e.jpg",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 86,
-   "created_at": "2026-09-23T16:30:32.721088+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "37a914897883",
    "title": "Xiaomi анонсировала архитектуру MiMo-V3 с ядром HySparse 2",
    "text": "🧠 Xiaomi раскрыла архитектуру новой модели MiMo-V3 — её ядром станет HySparse 2, представленный 23 сентября.\n\nРуководитель направления MiMo Ло Фули заявила, что новая схема сокращает вычисления на префилл (FLOPs) в 5,02 раза и уменьшает KV-кэш в 4,5 раза при длине контекста 1 млн токенов. Заявлены более высокие оценки MRCRv2 и RULER-v2 при снижении AgentPPL и LongPPL.\n\nКлючевые решения — KV Bridging (по идее YOCO: слои полного внимания в кросс-декодере строят K/V из скрытых состояний self-decoder) и KV Reuse (разреженные слои переиспользуют KV-кэш предыдущего слоя полного внимания). Выбор токенов теперь идёт на уровне токенов, а не блоков, а локальные и глобальные токены делят один KV-кэш.\n\nЭто продолжение серии: днём ранее Xiaomi выпустила и открыла MiMo-V2.6 Pro и Flash — полностью мультимодальные модели, часть курса на рекурсивное самоулучшение (RSI).\n\n#ИИ #Xiaomi\n\n<a href=\"https://www.ithome.com/1/006/502.htm\">Источник: IT之家</a>",
