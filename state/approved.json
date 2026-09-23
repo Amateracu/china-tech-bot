@@ -1,24 +1,6 @@
 {
  "items": [
   {
-   "id": "27d735ab38d1",
-   "title": "Inspur представила суперузел MetaBrain SD200 Ultra на 128 китайских ИИ-чипах",
-   "text": "🔲 Inspur показала суперузел MetaBrain SD200 Ultra со 128 китайскими ИИ-чипами и задержкой менее 5,85 мс на токен при работе с моделью Kimi K3 на 2,8 трлн параметров.\n\nАнонс сделали на конференции AICC2026. Устройство объединяет 128 чипов в один узел с тесной связкой и 8 ТБ унифицированной памяти ускорителей.\n\nЗаявленная задержка относится к инференсу Kimi K3 — модели на 2,8 трлн параметров. Это один из самых крупных открытых релизов последнего времени, и обычно такие модели требуют кластеров, а не одного узла.\n\nКлючевое здесь — ставка на локальные чипы вместо импортных ускорителей. Inspur собирает систему целиком из китайских компонентов, что важно на фоне ограничений на поставки. Цифры пока заявленные, независимых замеров нет.\n\n#чипы #Inspur\n\n<a href=\"https://pandaily.com/inspur-metabrain-sd200-ultra-128-chip-kimi-k3-5-85ms\">Источник: Pandaily</a>",
-   "url": "https://pandaily.com/inspur-metabrain-sd200-ultra-128-chip-kimi-k3-5-85ms",
-   "source_name": "Pandaily",
-   "source_id": "pandaily",
-   "llm_score": 7,
-   "raw_title": "Inspur MetaBrain SD200 Ultra Packs 128 Domestic AI Chips for 2.8T Kimi K3 Under 5.85ms/Token",
-   "raw_summary": "At AICC2026, Inspur Information launched the MetaBrain SD200 Ultra supernode with 128 tightly coupled domestic AI chips, 8 TB of unified accelerator memory and a claimed sub-5.85 ms/token latency running 2.8-trillion-parameter Kimi K3.",
-   "lang": "en",
-   "image_url": "https://cms-image.pandaily.com/1/inspur_sd200_ultra_4ba2d76a21.png",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 80,
-   "created_at": "2026-09-23T05:57:02.740276+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "efc968de1c2d",
    "title": "CXMT и YMTC заходят на рынки друг друга",
    "text": "🔲 Китайские производители памяти CXMT и YMTC начинают конкурировать напрямую: ChangXin Memory Technologies (CXMT), специализирующаяся на DRAM, и Yangtze Memory Technologies (YMTC), работающая в NAND, постепенно выходят в сегменты друг друга.\n\nДолгое время компании делили рынок: CXMT занималась оперативной памятью, YMTC — флеш-памятью. Теперь обе расширяют линейки в сторону чужого профиля, и конкуренция идёт уже не за долю внутри своей ниши, а за одни и те же заказы.\n\nДля Китая это шаг к более плотному покрытию всей памяти собственными силами — при сохранении экспортных ограничений на оборудование и готовую продукцию. Кто из двух быстрее нарастит выпуск и удержит цены, пока неясно: конкретных цифр по объёмам и срокам в сообщении нет.\n\n#чипы #CXMT\n\n<a href=\"https://www.cnbeta.com.tw/articles/tech/1579242.htm\">Источник: cnBeta</a>",
