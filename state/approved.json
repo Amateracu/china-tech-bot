@@ -1,24 +1,6 @@
 {
  "items": [
   {
-   "id": "33c0292b9416",
-   "title": "T-Head представила ИИ-чип Zhenwu V900",
-   "text": "🧠 T-Head, чиповое подразделение Alibaba, представила ИИ-чип Zhenwu V900 для обучения и инференса моделей.\n\nАнонс сделали на конференции Apsara 2026 в Ханчжоу. Тогда же компания обозначила план развития серверных CPU Yitian.\n\nКлючевое здесь не отдельный ускоритель, а смена подхода: T-Head переходит к стратегии полного стека — вычисления, хранение данных и сеть в одном контуре. Это попытка выстроить ИИ-инфраструктуру целиком внутри Alibaba, без опоры на внешних поставщиков.\n\nДля рынка это сигнал, что китайские облачные игроки всё плотнее закрывают собственный стек — от чипа до сервиса.\n\n#ИИ #Alibaba\n\n<a href=\"https://technode.com/2026/09/22/t-head-unveils-zhenwu-v900-ai-chip-in-alibabas-push-to-expand-its-ai-infrastructure-stack\">Источник: TechNode</a>",
-   "url": "https://technode.com/2026/09/22/t-head-unveils-zhenwu-v900-ai-chip-in-alibabas-push-to-expand-its-ai-infrastructure-stack",
-   "source_name": "TechNode",
-   "source_id": "technode",
-   "llm_score": 7,
-   "raw_title": "T-Head unveils Zhenwu V900 AI chip in Alibaba’s push to expand its AI infrastructure stack",
-   "raw_summary": "T-Head, Alibaba’s chip subsidiary, today unveiled its next-generation Zhenwu V900 AI chip for both training and inference at the 2026 Apsara Conference in Hangzhou. The company also outlined its roadmap for future Yitian server CPUs. The announcements show T-Head expanding beyond individual AI accelerators toward a full-stack chip strategy covering computing, storage, and networking as […]",
-   "lang": "en",
-   "image_url": "https://i0.wp.com/technode.com/wp-content/uploads/2026/09/T-head-2.jpg?fit=1024%2C771&amp;ssl=1",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 79,
-   "created_at": "2026-09-23T05:56:57.637543+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "dbfba0c30ca0",
    "title": "DeepSeek опубликовала статью об инфраструктуре для обучения агентов",
    "text": "🧠 DeepSeek опубликовала научную статью о системе DSec для обучения ИИ-агентов, в числе авторов указан Лян Вэньфэн.\n\nСуть в том, что если обучение больших моделей упирается в вычислительную мощность, то обучение агентов упирается в среду. Агенту нужно писать код, запускать компиляцию, открывать браузер — и каждое действие меняет состояние среды, которую легко сломать. Поэтому на каждый шаг обучения нужна новая чистая «песочница».\n\nDSec как раз массово их и создаёт: более 5000 песочниц в секунду, до 3 млн в сутки, пиковая одновременная работа — 380 тысяч. Кластер для этого — около 160 узлов, 30 тысяч ядер CPU и 250 ТБ памяти.\n\nСистема поддерживает четыре типа окружений: от простого вызова функций до полноценных виртуальных машин с Windows или macOS и графическим интерфейсом. Для тренировочного фреймворка все они выглядят одинаково через единый Python SDK. Работает это на масштабе, где важна уже не модель, а инфраструктура.\n\n#ИИ #DeepSeek\n\n<a href=\"https://www.ithome.com/1/006/148.htm\">Источник: IT之家</a>",
