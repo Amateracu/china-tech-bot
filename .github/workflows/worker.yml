@@ -33,6 +33,11 @@ jobs:
 
       - run: pip install -r requirements.txt
 
+      # китайский шрифт для водяного знака 明 на своих карточках;
+      # если не поставится — карточки всё равно рисуются, просто без знака
+      - name: Китайский шрифт для карточек
+        run: sudo apt-get install -y -qq fonts-noto-cjk >/dev/null || true
+
       - name: Настроить git для сохранения состояния
         run: |
           git config user.name "china-tech-bot"

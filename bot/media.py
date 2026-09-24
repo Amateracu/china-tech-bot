@@ -151,6 +151,26 @@ def _font(size: int, paths=_FONT_PATHS, index=0):
     return None
 
 
+# Китайские названия источников латинский шрифт карточки рисует квадратиками,
+# поэтому на карточке пишем их латиницей.
+_LATIN_LABELS = {
+    "IT之家": "ITHome", "36氪": "36Kr", "爱范儿": "ifanr", "量子位": "QbitAI",
+    "虎嗅": "Huxiu", "快科技": "MyDrivers", "机器之心": "Jiqizhixin", "钛媒体": "TMTPost",
+}
+
+
+def card_label(source_name: str) -> str:
+    """Подпись источника на карточке: только символы, которые точно отрисуются."""
+    name = (source_name or "").strip()
+    if name in _LATIN_LABELS:
+        return _LATIN_LABELS[name]
+    if all(ch.isascii() or "\u0400" <= ch <= "\u04ff" for ch in name):
+        return name
+    # неизвестное китайское название: оставляем латиницу и цифры, если они есть
+    latin = "".join(ch for ch in name if ch.isascii()).strip()
+    return latin
+
+
 def make_card(title: str, source_name: str = "") -> bytes:
     """Фирменная карточка с заголовком — когда у источника картинки нет."""
     from PIL import Image, ImageDraw
@@ -189,8 +209,9 @@ def make_card(title: str, source_name: str = "") -> bytes:
         y += line_h
 
     small = _font(28)
-    if small and source_name:
-        draw.text((CARD_W * 0.08, CARD_H - 78), source_name.upper(),
+    label = card_label(source_name)
+    if small and label:
+        draw.text((CARD_W * 0.08, CARD_H - 78), label.upper(),
                   font=small, fill=_mix(bg, fg, 0.72))
     draw.rectangle([CARD_W * 0.08, CARD_H * 0.5 - block_h / 2 - CARD_H * 0.09,
                     CARD_W * 0.08 + 96, CARD_H * 0.5 - block_h / 2 - CARD_H * 0.09 + 8], fill=fg)

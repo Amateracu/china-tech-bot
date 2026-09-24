@@ -606,5 +606,21 @@ class TestPhotoCard(unittest.TestCase):
         self.assertTrue(caption.endswith(post))
 
 
+
+class TestCardLabel(unittest.TestCase):
+    def test_chinese_source_names_become_latin(self):
+        from bot import media
+        self.assertEqual(media.card_label("IT之家"), "ITHome")
+        self.assertEqual(media.card_label("Gizmochina"), "Gizmochina")
+        self.assertEqual(media.card_label("Неизвестный"), "Неизвестный")
+        self.assertEqual(media.card_label("新媒体X"), "X")
+
+    def test_prompt_rules(self):
+        from bot.llm import _system_prompt
+        prompt = _system_prompt()
+        self.assertIn("без китайского угла", prompt)
+        self.assertIn("Цифры из абзацев в ней не повторяй", prompt)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
