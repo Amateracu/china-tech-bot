@@ -1,24 +1,6 @@
 {
  "items": [
   {
-   "id": "232aca2ee2e1",
-   "title": "DeepSeek раскрыла детали платформы DSec для обучения ИИ-агентов",
-   "text": "🧠 DeepSeek раскрыла детали своей платформы DSec — облачных песочниц для обучения ИИ-агентов методом RL.\n\nМасштаб: около 3 млн песочниц в сутки, пиковая одновременная нагрузка выше 380 тыс., скорость создания — свыше 5 000 в секунду.\n\nПлатформа описана в статье на arXiv (2609.22978), среди соавторов — Вэньфэн Лян. Речь о песочницах, в которых агенты обучаются через взаимодействие со средой: для этого нужны тысячи параллельных изолированных окружений, и DSec как раз решает задачу их массового запуска.\n\nТакие цифры показывают, во что упирается обучение агентных моделей сегодня — не только в compute для самих весов, но и в инфраструктуру для сред.\n\n#ИИ #DeepSeek\n\n<a href=\"https://pandaily.com/deepseek-dsec-elastic-compute-agentic-training-sandbox-3m-day\">Источник: Pandaily</a>",
-   "url": "https://pandaily.com/deepseek-dsec-elastic-compute-agentic-training-sandbox-3m-day",
-   "source_name": "Pandaily",
-   "source_id": "pandaily",
-   "llm_score": 7,
-   "raw_title": "DeepSeek Details DSec Elastic Compute: Agentic-Training Sandboxes at ~3M/Day, 380K+ Concurrent",
-   "raw_summary": "DeepSeek detailed DSec, its Elastic Compute sandbox platform for agentic RL, reporting about 3M sandboxes/day, peak concurrency above 380k and create rates over 5,000/s, with Wenfeng Liang among co-authors on arXiv 2609.22978.",
-   "lang": "en",
-   "image_url": "https://cms-image.pandaily.com/1/deepseek_dsec_elastic_compute_8b046f216a.png",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 102,
-   "created_at": "2026-09-24T14:19:50.700020+00:00",
-   "rewrites": 0
-  },
-  {
    "id": "e6c1334ef66f",
    "title": "Аналитик обвинил AMD в поставках ограниченных чипов в Китай",
    "text": "<b>🔲 Аналитик обвинил AMD в «госизмене» из-за чипов в Китае — компания списывает всё на перепродажу</b>\n\nВедущая аналитическая фирма по полупроводникам заявила, что AMD стоит проверить на предмет «госизмены»: в Китае якобы доступны чипы, попадающие под экспортные ограничения. Речь о <b>RFSoC</b> — адаптируемой радиочастотной платформе.\n\nAMD отвечает: возможна «диверсия», то есть чипы могли перепродать в обход правил уже после поставки. Публичных доказательств ни одна сторона не приводит.\n\n<blockquote>💬 Обвинение в госизмене — это уже не юридический спор, а публичная порка. Но по сути вопрос старый: контролировать, куда уехал чип после первой продажи, почти невозможно. Китайским заказчикам такие RFSoC нужны для связи и РЭБ — и серый рынок это учитывает.</blockquote>\n\n#чипы #AMD\n\n<a href=\"https://www.tomshardware.com/tech-industry/leading-semiconductor-analyst-accuses-amd-of-treason-over-restricted-chips-availability-in-china-amd-blames-diversion-of-export-controlled-rfsoc-usd36-000-radar-silicon-allegedly-quoted-at-usd1-000-for-crowdfunding-project\">Источник: Tom's Hardware</a>",
