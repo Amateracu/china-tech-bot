@@ -97,7 +97,7 @@ def edit_caption(chat_id, message_id, caption, reply_markup=None):
     params = {
         "chat_id": chat_id,
         "message_id": message_id,
-        "caption": caption[:CAPTION_LIMIT],
+        "caption": caption,   # длину проверяет вызывающий: резать HTML вслепую нельзя
         "parse_mode": "HTML",
     }
     if reply_markup is not None:

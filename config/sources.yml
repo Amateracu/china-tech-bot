@@ -85,6 +85,113 @@ rss:
     weight: 0.9
     enabled: true
 
+  # --- добавлено 2026-09: больше англоязычных нишевых лент ---
+  - id: cntechpost
+    name: CnTechPost
+    url: https://cntechpost.com/feed/
+    lang: en
+    china_native: true
+    weight: 1.1
+    enabled: true
+
+  - id: gizmochina
+    name: Gizmochina
+    url: https://www.gizmochina.com/feed/
+    lang: en
+    china_native: true
+    weight: 0.9
+    enabled: true
+
+  - id: huaweicentral
+    name: Huawei Central
+    url: https://www.huaweicentral.com/feed/
+    lang: en
+    china_native: true
+    weight: 0.8
+    enabled: true
+
+  - id: kr_asia
+    name: KrASIA
+    url: https://kr-asia.com/feed
+    lang: en
+    china_native: false
+    weight: 1.0
+    enabled: true
+
+  - id: techcrunch_china
+    name: TechCrunch China
+    url: https://techcrunch.com/tag/china/feed/
+    lang: en
+    china_native: true
+    weight: 1.0
+    enabled: true
+
+  - id: robotreport
+    name: The Robot Report
+    url: https://www.therobotreport.com/feed/
+    lang: en
+    china_native: false
+    weight: 0.9
+    enabled: true
+
+  - id: tomshardware
+    name: Tom's Hardware
+    url: https://www.tomshardware.com/feeds/all
+    lang: en
+    china_native: false
+    weight: 0.8
+    enabled: true
+
+  # --- добавлено 2026-09: китайские издания ---
+  - id: ifanr
+    name: 爱范儿
+    url: https://www.ifanr.com/feed
+    lang: zh
+    china_native: true
+    weight: 1.0
+    enabled: true
+
+  - id: qbitai
+    name: 量子位
+    url: https://www.qbitai.com/feed
+    lang: zh
+    china_native: true
+    weight: 1.0
+    enabled: true
+
+  - id: huxiu
+    name: 虎嗅
+    url: https://www.huxiu.com/rss/0.xml
+    lang: zh
+    china_native: true
+    weight: 0.8
+    enabled: true
+
+  # адреса ниже не проверены: включите, если check_sources.py покажет OK
+  - id: mydrivers
+    name: 快科技
+    url: https://rss.mydrivers.com/rss.aspx?Tid=1
+    lang: zh
+    china_native: true
+    weight: 1.0
+    enabled: false
+
+  - id: jiqizhixin
+    name: 机器之心
+    url: https://www.jiqizhixin.com/rss
+    lang: zh
+    china_native: true
+    weight: 1.0
+    enabled: false
+
+  - id: tmtpost
+    name: 钛媒体
+    url: https://www.tmtpost.com/rss.xml
+    lang: zh
+    china_native: true
+    weight: 0.8
+    enabled: false
+
   # --- выключено по умолчанию: часто режет ботов / нестабильно ---
   - id: nikkei_asia
     name: Nikkei Asia

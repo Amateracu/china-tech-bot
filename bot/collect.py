@@ -5,13 +5,13 @@
 import sys
 from datetime import timedelta
 
-from . import media, store
+from . import events, media, store
 from .config import (MODERATOR_CHAT_ID, PIPELINE, SOURCES, DRY_RUN, require)
-from .llm import render, write_post
+from .llm import ask_json, render, write_post
 from .relevance import prefilter
 from .sources import collect_all
-from .tg_api import CAPTION_LIMIT, keyboard, send_message, send_photo
-from .util import esc, iso, now_utc, similarity, truncate
+from .tg_api import CAPTION_LIMIT, TEXT_LIMIT, keyboard, send_message, send_photo
+from .util import esc, fit_html, iso, now_utc, similarity, visible_len
 
 
 def log(*args):
@@ -48,15 +48,55 @@ def _dedupe(items, seen_items, threshold: float):
 MEDIA_LABEL = {"source": "фото источника", "card": "своя карточка", "": "без картинки"}
 
 
-def _moderation_card(item, data, post_text, media_kind="") -> str:
+FOLLOWUP_HINT = (
+    "Это продолжение истории, о которой канал уже писал: «{title}». "
+    "Не пересказывай старое — сделай акцент на том, что изменилось. "
+    "Первая строка должна ясно говорить, что это развитие событий."
+)
+
+
+def _moderation_card(item, data, post_text, media_kind="", compact=False) -> str:
+    """Карточка для лички: шапка со служебной информацией + сам пост.
+
+    compact — укороченная шапка в одну строку, чтобы пост с картинкой влез
+    в лимит подписи Telegram.
+    """
+    follow = ""
+    if item.followup_of:
+        follow = f"🔁 продолжение: «{esc(item.followup_of[:70])}»\n"
+    meta = f"<i>{esc(item.source_name)} · {data.get('score')}/10"
+    if compact:
+        return f"{meta}</i>\n{follow}{'─' * 12}\n{post_text}"
     matched = ", ".join(item.matched[:4]) or "—"
     head = (
         f"<b>{esc(data['title'])}</b>\n"
-        f"<i>{esc(item.source_name)} · {data.get('score')}/10 · "
-        f"{MEDIA_LABEL.get(media_kind, '')} · {esc(matched)}</i>\n"
-        f"{'─' * 18}\n"
+        f"{meta} · {MEDIA_LABEL.get(media_kind, '')} · {esc(matched)}</i>\n"
+        f"{follow}{'─' * 18}\n"
     )
     return head + post_text
+
+
+def _send_card(item, data, post_text, blob, media_kind):
+    """Отправляет карточку модератору. Возвращает (сообщение, is_photo, media_kind).
+
+    Картинка остаётся у поста, если влезает сам пост — служебная шапка ради этого
+    сокращается. Раньше длинная шапка лишала картинки и пост в канале.
+    """
+    if blob and visible_len(post_text) <= CAPTION_LIMIT:
+        for card in (_moderation_card(item, data, post_text, media_kind),
+                     _moderation_card(item, data, post_text, media_kind, compact=True),
+                     post_text):
+            if visible_len(card) <= CAPTION_LIMIT:
+                msg = send_photo(MODERATOR_CHAT_ID, blob, card,
+                                 reply_markup=keyboard(item.id), silent=True)
+                return msg, True, media_kind
+    card = _moderation_card(item, data, post_text, media_kind)
+    if blob:
+        card += "\n\n<i>Пост длиннее лимита подписи — уйдёт текстом.</i>"
+        media_kind = ""
+    msg = send_message(MODERATOR_CHAT_ID, fit_html(card, TEXT_LIMIT - 200),
+                       reply_markup=keyboard(item.id), silent=True)
+    return msg, False, media_kind
 
 
 def main(limit: int = None, force: bool = False) -> int:
@@ -83,7 +123,21 @@ def main(limit: int = None, force: bool = False) -> int:
     items = items[: int(PIPELINE.get("max_candidates", 40))]
 
     items = _dedupe(items, seen["items"], float(PIPELINE.get("dedupe_similarity", 0.55)))
-    log(f"После дедупликации: {len(items)}")
+    log(f"После дедупликации по словам: {len(items)}")
+
+    memory = events.load(int(PIPELINE.get("event_memory_days", 10)))
+    if PIPELINE.get("event_dedupe", True) and items:
+        before = items
+        items = events.pick(items, memory, ask_json,
+                            followups=bool(PIPELINE.get("followups", True)), log=log)
+        # отсеянные повторы запоминаем как виденные — в следующий раз они
+        # отпадут ещё до модели и не будут стоить запроса
+        kept_ids = {i.id for i in items}
+        for dup in before:
+            if dup.id not in kept_ids:
+                seen["items"].append({"id": dup.id, "title": dup.title, "url": dup.url,
+                                      "at": iso(now_utc()), "dup": True})
+        log(f"После дедупликации по событиям: {len(items)}")
 
     max_per_run = int(limit or PIPELINE.get("max_per_run", 5))
     min_llm_score = float(PIPELINE.get("min_llm_score", 6))
@@ -97,8 +151,9 @@ def main(limit: int = None, force: bool = False) -> int:
         if item.id in queued_ids:
             continue
 
+        hint = FOLLOWUP_HINT.format(title=item.followup_of) if item.followup_of else ""
         try:
-            data = write_post(item)
+            data = write_post(item, variant_hint=hint)
         except RuntimeError as exc:
             log(f"  ! {item.title[:60]} — {exc}")
             continue
@@ -120,18 +175,8 @@ def main(limit: int = None, force: bool = False) -> int:
         )
         if not media_kind:
             log(f"    без картинки: фид дал {image_url[:60]!r}")
-        card = _moderation_card(item, data, post_text, media_kind)
-
-        as_photo = bool(blob) and len(card) <= CAPTION_LIMIT
-        if as_photo:
-            msg = send_photo(MODERATOR_CHAT_ID, blob, card,
-                             reply_markup=keyboard(item.id), silent=True)
-        else:
-            if blob:
-                card += "\n\n<i>Пост длиннее лимита подписи — уйдёт текстом.</i>"
-                media_kind = ""
-            msg = send_message(MODERATOR_CHAT_ID, truncate(card, 3400),
-                               reply_markup=keyboard(item.id), silent=True)
+        msg, as_photo, media_kind = _send_card(item, data, post_text, blob, media_kind)
+        events.remember(memory, item.id, data["title"], post_text)
         queue["items"].append(
             {
                 "id": item.id,
@@ -150,6 +195,7 @@ def main(limit: int = None, force: bool = False) -> int:
                 "message_id": msg.get("message_id"),
                 "created_at": iso(now_utc()),
                 "rewrites": 0,
+                "followup_of": item.followup_of,
             }
         )
         sent += 1
@@ -161,6 +207,7 @@ def main(limit: int = None, force: bool = False) -> int:
     if not DRY_RUN:
         store.save("seen.json", seen)
         store.save("queue.json", queue)
+        events.save(memory)
 
     log(f"Готово. Отправлено на модерацию: {sent}. В очереди всего: {len(queue['items'])}")
     main.last_report = {

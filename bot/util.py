@@ -98,3 +98,99 @@ def truncate(text: str, limit: int) -> str:
 
 def esc(text: str) -> str:
     return html.escape(text or "", quote=False)
+
+
+# ── HTML для Telegram ────────────────────────────────────────────────────────
+# Telegram принимает только небольшой набор тегов и отвергает сообщение целиком,
+# если хоть один тег не закрыт или неизвестен. Модель иногда ошибается, поэтому
+# всё, что уходит в Telegram, проходит через sanitize_html.
+
+ALLOWED_TAGS = ("b", "i", "u", "s", "code", "blockquote", "tg-spoiler")
+_ALIASES = {"strong": "b", "em": "i", "ins": "u", "strike": "s", "del": "s"}
+_TAG_TOKEN_RE = re.compile(r"<\s*(/?)\s*([a-zA-Z][a-zA-Z0-9-]*)([^<>]*)>")
+
+
+def sanitize_html(text: str, drop_unknown: bool = False) -> str:
+    """Оставляет только разрешённые теги, остальное экранирует и закрывает незакрытое.
+
+    drop_unknown=True — чужие теги (<p>, <div>, <a>…) выкидываются молча: так
+    обрабатываем ответ модели. False — показываются как текст: так обрабатываем
+    ручную правку, чтобы человек видел, что тег не сработал.
+    """
+    text = text or ""
+    out, stack = [], []
+    skipped_quotes = 0   # вложенные цитаты Telegram не поддерживает — пропускаем
+    pos = 0
+
+    def put_text(chunk):
+        if chunk:
+            out.append(esc(html.unescape(chunk)))
+
+    for m in _TAG_TOKEN_RE.finditer(text):
+        put_text(text[pos:m.start()])
+        pos = m.end()
+        closing, name, attrs = m.group(1) == "/", m.group(2).lower(), m.group(3)
+        name = _ALIASES.get(name, name)
+
+        if name == "br":
+            out.append("\n")
+            continue
+        if name not in ALLOWED_TAGS:
+            if not drop_unknown:
+                out.append(esc(m.group(0)))
+            continue
+
+        if not closing:
+            if name == "blockquote" and "blockquote" in stack:
+                skipped_quotes += 1
+                continue
+            if name == "blockquote" and "expandable" in attrs.lower():
+                out.append("<blockquote expandable>")
+            else:
+                out.append(f"<{name}>")
+            stack.append(name)
+            continue
+
+        if name == "blockquote" and skipped_quotes:
+            skipped_quotes -= 1
+            continue
+        if name not in stack:
+            continue                       # лишний закрывающий — просто выкидываем
+        while stack:                       # закрываем всё, что открыто внутри
+            top = stack.pop()
+            out.append(f"</{top}>")
+            if top == name:
+                break
+
+    put_text(text[pos:])
+    while stack:
+        out.append(f"</{stack.pop()}>")
+    return "".join(out)
+
+
+def plain_text(text: str) -> str:
+    """Видимый текст без тегов — как его увидит читатель."""
+    return html.unescape(_TAG_RE.sub("", text or ""))
+
+
+def visible_len(text: str) -> int:
+    """Длина так, как её считает Telegram: без тегов, в единицах UTF-16.
+
+    Эмодзи в UTF-16 занимают две единицы, поэтому обычный len() занижает длину
+    постов с эмодзи, а длина с тегами — сильно завышает.
+    """
+    return len(plain_text(text).encode("utf-16-le")) // 2
+
+
+def fit_html(text: str, limit: int) -> str:
+    """Если текст с разметкой не влезает в лимит — отдаём обрезанный простой текст.
+
+    Резать HTML посередине нельзя: оборванный тег Telegram не примет.
+    """
+    if visible_len(text) <= limit:
+        return text
+    plain = plain_text(text)
+    while plain and len(plain.encode("utf-16-le")) // 2 > limit - 1:
+        cut = plain[: int(len(plain) * 0.95)]
+        plain = cut.rsplit(" ", 1)[0] if " " in cut else cut
+    return esc(plain.rstrip() + "…") if plain else ""

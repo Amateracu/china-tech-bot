@@ -10,7 +10,7 @@ from datetime import timedelta
 from . import media, store
 from .config import CHANNEL_ID, DRY_RUN, PUBLISHING, require
 from .tg_api import CAPTION_LIMIT, send_message, send_photo
-from .util import iso, local_now, now_utc, parse_iso
+from .util import iso, local_now, now_utc, parse_iso, visible_len
 
 
 def log(*args):
@@ -25,7 +25,7 @@ def publish_now(post: dict) -> dict:
             post.get("title", ""), post.get("image_url", ""),
             post.get("url", ""), post.get("source_name", ""),
         )
-    if blob and len(post["text"]) <= CAPTION_LIMIT:
+    if blob and visible_len(post["text"]) <= CAPTION_LIMIT:
         msg = send_photo(CHANNEL_ID, blob, post["text"], silent=False)
     else:
         msg = send_message(

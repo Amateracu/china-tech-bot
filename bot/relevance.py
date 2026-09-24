@@ -1,5 +1,28 @@
 """Предфильтр: дешёвая оценка «про Китай и про технологии?» до обращения к LLM."""
+import re
+from functools import lru_cache
+
 from .config import FILTERS
+
+
+@lru_cache(maxsize=2048)
+def _pattern(term: str):
+    """Короткие латинские термины ищем целым словом: иначе «ev» находится в «every»
+    и «review», а «nio» — в «union», и мусор получает баллы. Длинные — по началу
+    слова, чтобы «chip» ловил и «chips», и «chipmaker». Китайские — подстрокой:
+    пробелов между словами там нет."""
+    term = term.lower()
+    if not term.isascii():
+        return None
+    esc = re.escape(term)
+    if len(term) <= 3:
+        return re.compile(rf"(?<![a-z0-9]){esc}(?![a-z0-9])")
+    return re.compile(rf"(?<![a-z0-9]){esc}")
+
+
+def _has(term: str, text: str) -> bool:
+    pat = _pattern(term)
+    return pat.search(text) is not None if pat else term.lower() in text
 
 
 def _haystack(item) -> str:
@@ -24,18 +47,18 @@ def score(item) -> tuple:
     total, matched = 0.0, []
 
     for name, w in (FILTERS.get("entities") or {}).items():
-        if name.lower() in text:
+        if _has(name, text):
             total += float(w)
             matched.append(name)
     for name, w in (FILTERS.get("topics") or {}).items():
-        if name.lower() in text:
+        if _has(name, text):
             total += float(w)
             matched.append(name)
 
     # заголовок весит больше, чем тело
     title = item.title.lower()
     for name in list(matched):
-        if name.lower() in title:
+        if _has(name, title):
             total += 0.5
 
     return round(total * item.weight, 2), matched[:8]
