@@ -1,25 +1,6 @@
 {
  "items": [
   {
-   "id": "08c2f9cdc9fb",
-   "title": "ASUS ProArt P16 на чипе Nvidia RTX Spark N1X выходит 8 октября",
-   "text": "🔲 <b>ASUS ProArt P16 на чипе Nvidia RTX Spark N1X выходит 8 октября — «первый в мире ноутбук с ИИ-агентом»</b>\n\nASUS объявила дату анонса ProArt 创 16 (P16) на суперчипе <b>Nvidia RTX Spark N1X</b> — <b>8 октября</b>. Модель H7607 показали ещё на COMPUTEX 2026, теперь дело дошло до релиза. Ключевое обещание — локальные ИИ-агенты вместо облака: заявлено до <b>128 ГБ</b> унифицированной памяти.\n\n📅 Ровно накануне, 7 октября по США, Microsoft проводит мероприятие по локальным ИИ-PC — совпадение явно не случайное.\n\n<blockquote expandable>▫️ OLED-экран с сертификацией VESA DisplayHDR True Black 1000\n▫️ Батарея 99,9 Вт·ч\n▫️ Толщина 12,9 мм, вес около 1,77 кг\n▫️ Есть младшая 14-дюймовая модель ProArt P14</blockquote>\n\n<blockquote>💬 Локальные агенты — это ответ на боль облачных подписок и утечек: данные не уезжают с ноутбука. Но пока непонятно, кто будет писать под это софт — одной памяти для убедительной истории мало.</blockquote>\n\n#чипы #Nvidia\n\n<a href=\"https://www.ithome.com/1/007/393.htm\">Источник: IT之家</a>",
-   "url": "https://www.ithome.com/1/007/393.htm",
-   "source_name": "IT之家",
-   "source_id": "ithome",
-   "llm_score": 7,
-   "raw_title": "华硕：英伟达 RTX Spark 款 ProArt 创 16 创作本 10 月 8 日登场",
-   "raw_summary": "IT之家 9 月 26 日消息，华硕 (ASUS) 近日宣布， 其基于 NVIDIA（英伟达）RTX Spark N1X 超级芯片的 ProArt 创 16 (P16) 创作笔记本电脑将于 10 月 8 日登场 。 该设备号称“全球首款智能体电脑”，支持本地 AI 智能体流畅响应，让创意工作流无需再依托云端。 IT之家注意到，华硕此前已在 COMPUTEX 2026 上公布了这款型号 H7607 的设备。其支持 128GB 统一内存， 配备 VESA DisplayHDR True Black 1000 认证 OLED 屏幕 ，内置 99.9Whr 电池，薄至 12.9mm、轻约 1.77kg。另有 14 英寸级的 ProArt P14 机型。 微软也将在当地时间 10 月 7 日（北京时间 10 月 8 日）举行本地 AI PC 发布活动。",
-   "lang": "zh",
-   "image_url": "https://img.ithome.com/newsuploadfiles/2026/9/5ee9e9f1-ce23-486b-b823-65b3638b26a0.jpg?x-bce-process=image/format,f_auto",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 156,
-   "created_at": "2026-09-26T11:43:08.608193+00:00",
-   "rewrites": 0,
-   "followup_of": ""
-  },
-  {
    "id": "df753b9e6ed9",
    "title": "Alibaba внедряет ИИ-рейтинг заведений в карты Amap против Meituan",
    "text": "<b>🧠 Alibaba превращает карты Amap в ИИ-рейтинг еды — и заказы в закусочных растут на 50–60%</b>\n\nAlibaba встроила в своё картографическое приложение Amap функцию Street Stars: ИИ сам оценивает заведения и выводит лучшие на главный экран. Владелец небольшой лапшичной в Шанхае Чжан Сюань говорит, что после попадания на четвёртое место в районе Чаннин продажи выросли на <b>50–60%</b> к обычному уровню.\n\n<blockquote expandable>▫️ Функция называется Street Stars\n▫️ Оценки формирует ИИ, а не пользователи\n▫️ Лучшие заведения показываются на главной странице Amap\n▫️ Пример — лапшичная в Шанхае, район Чаннин</blockquote>\n\n<blockquote>💬 Alibaba бьёт Meituan там, где тот вроде бы давно укрепился: в локальном поиске еды. Если рейтинг от ИИ реально гонит поток клиентов, спорить с ним будут не маркетологи, а сами рестораторы.</blockquote>\n\n#ИИ #Alibaba\n\n<a href=\"https://www.scmp.com/tech/big-tech/article/3368819/how-alibaba-using-ai-revamp-its-mapping-app-and-take-meituan\">Источник: SCMP Tech</a>",
