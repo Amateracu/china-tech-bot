@@ -5,6 +5,7 @@
 """
 import io
 import json
+import types
 import sys
 import unittest
 from datetime import datetime, timedelta, timezone
@@ -370,8 +371,261 @@ class TestManualEdit(unittest.TestCase):
         self.assertIn("5 &lt; 7", out)
 
 
+class TestUtil(unittest.TestCase):
+    def test_similarity(self):
+        self.assertGreater(util.similarity("Huawei unveils 5nm chip",
+                                           "Huawei presents 5nm chip"), 0.55)
+        self.assertLess(util.similarity("BYD battery plant",
+                                        "Alibaba cloud earnings"), 0.3)
+
+    def test_chinese_titles_compare(self):
+        self.assertGreater(util.similarity("华为发布新款芯片", "华为发布新芯片"), 0.5)
+
+
+# ── апгрейд 2026-09: разметка, голос, дедуп по событиям ──────────────────────
+
+class TestHtml(unittest.TestCase):
+    def test_unclosed_and_foreign_tags_from_model(self):
+        out = util.sanitize_html("<b>Заголовок\n<p>абзац</p> <strong>x</strong>", drop_unknown=True)
+        self.assertEqual(out, "<b>Заголовок\nабзац <b>x</b></b>")
+
+    def test_crossed_tags_are_balanced(self):
+        self.assertEqual(util.sanitize_html("<b>a<i>b</b>c</i>"), "<b>a<i>b</i></b>c")
+
+    def test_expandable_quote_and_br(self):
+        out = util.sanitize_html("<blockquote expandable>▫️ a<br/>▫️ b</blockquote>", True)
+        self.assertEqual(out, "<blockquote expandable>▫️ a\n▫️ b</blockquote>")
+
+    def test_nested_quote_flattened(self):
+        out = util.sanitize_html("<blockquote>a <blockquote>b</blockquote> c</blockquote>")
+        self.assertEqual(out, "<blockquote>a b c</blockquote>")
+
+    def test_entities_not_double_escaped(self):
+        self.assertEqual(util.sanitize_html("AT&amp;T и 5 < 7"), "AT&amp;T и 5 &lt; 7")
+
+    def test_visible_len_ignores_tags_counts_emoji_as_two(self):
+        self.assertEqual(util.visible_len("<b>🔋 ab</b>"), 5)
+
+    def test_fit_html_never_cuts_a_tag(self):
+        out = util.fit_html("<b>" + "слово " * 400 + "</b>", 300)
+        self.assertLessEqual(util.visible_len(out), 300)
+        self.assertNotIn("<b", out)
+
+
+class TestVoice(unittest.TestCase):
+    def test_prompt_formats_and_asks_for_author_take(self):
+        from bot.llm import _system_prompt
+        prompt = _system_prompt()
+        self.assertIn("<blockquote>💬", prompt)
+        self.assertIn("expandable", prompt)
+        self.assertNotIn("Сухо, по делу", prompt)
+
+    def test_render_cleans_model_markup(self):
+        data = {"publish": True, "score": 8, "title": "t", "tags": ["#ИИ"],
+                "text": "🧠 <b>Заголовок\n\n<p>Текст</p><blockquote>💬 мнение"}
+        out = render(data, "https://e.com", "S")
+        self.assertIn("<b>Заголовок\n\nТекст<blockquote>💬 мнение</blockquote></b>", out)
+        self.assertNotIn("<p>", out)
+
+
+class TestPrefilterWords(unittest.TestCase):
+    def test_short_terms_match_whole_words_only(self):
+        self.assertFalse(relevance._has("ev", "every review of the union"))
+        self.assertFalse(relevance._has("nio", "senior union"))
+        self.assertTrue(relevance._has("ev", "china ev sales"))
+        self.assertTrue(relevance._has("chip", "chinese chipmaker"))
+        self.assertTrue(relevance._has("宇树", "宇树科技发布"))
+
+
+def _items(*specs):
+    out = []
+    for i, (source, title) in enumerate(specs):
+        out.append(Item(id=f"id{i}", title=title, summary="", url=f"https://e.com/{i}",
+                        source_id=source.lower(), source_name=source))
+    return out
+
+
+class TestEvents(unittest.TestCase):
+    def _ask(self, rows):
+        return lambda system, user: {"items": rows}
+
+    def test_same_event_in_batch_keeps_first(self):
+        from bot import events
+        items = _items(("TechNode", "Alibaba unveils Zhenwu V900 AI chip"),
+                       ("cnBeta", "阿里发布新一代自研AI芯片"),
+                       ("CnEVPost", "BYD opens new plant"))
+        rows = [{"n": 0, "group": "g1", "seen": None}, {"n": 1, "group": "g1", "seen": None},
+                {"n": 2, "group": "g2", "seen": None}]
+        kept = events.pick(items, {"items": []}, self._ask(rows), log=lambda *a: None)
+        self.assertEqual([i.source_name for i in kept], ["TechNode", "CnEVPost"])
+
+    def test_already_shown_event_is_dropped(self):
+        from bot import events
+        items = _items(("Pandaily", "Alibaba opens Qwen-Image-2.1"))
+        memory = {"items": [{"title": "Alibaba открыла Qwen-Image-2.1", "at": util.iso(NOW)}]}
+        rows = [{"n": "N0", "group": "g1", "seen": "M0", "new_facts": False}]
+        self.assertEqual(events.pick(items, memory, self._ask(rows), log=lambda *a: None), [])
+
+    def test_new_facts_become_followup(self):
+        from bot import events
+        items = _items(("CnEVPost", "Xiaomi YU7 deliveries begin"))
+        memory = {"items": [{"title": "Xiaomi открыла предзаказ YU7", "at": util.iso(NOW)}]}
+        rows = [{"n": 0, "group": "g1", "seen": "M0", "new_facts": True}]
+        kept = events.pick(items, memory, self._ask(rows), log=lambda *a: None)
+        self.assertEqual(kept[0].followup_of, "Xiaomi открыла предзаказ YU7")
+        kept = events.pick(_items(("CnEVPost", "x")), memory, self._ask(rows),
+                           followups=False, log=lambda *a: None)
+        self.assertEqual(kept, [])
+
+    def test_model_failure_keeps_everything(self):
+        from bot import events
+
+        def boom(*a):
+            raise RuntimeError("timeout")
+        items = _items(("A", "one"), ("B", "two"))
+        self.assertEqual(events.pick(items, {"items": []}, boom, log=lambda *a: None), items)
+
+    def test_garbage_answer_keeps_everything(self):
+        from bot import events
+        items = _items(("A", "one"), ("B", "two"))
+        ask = self._ask([{"n": 99, "group": "g"}, "мусор", {"n": 0, "seen": "M7"}])
+        self.assertEqual(len(events.pick(items, {"items": []}, ask, log=lambda *a: None)), 2)
+
+
+class _TmpState:
+    """Подменяет папку state/ на временную."""
+
+    def __enter__(self):
+        import tempfile
+        from bot import store
+        self._dir = tempfile.TemporaryDirectory()
+        self._patch = mock.patch.object(store, "STATE_DIR", Path(self._dir.name))
+        self._patch.start()
+        return Path(self._dir.name)
+
+    def __exit__(self, *exc):
+        self._patch.stop()
+        self._dir.cleanup()
+
+
+class TestEventMemory(unittest.TestCase):
+    def test_backfill_from_existing_state(self):
+        from bot import events, store
+        with _TmpState():
+            store.save("published.json", {"items": [
+                {"id": "p1", "title": "Alibaba показала ИИ-чип", "at": util.iso(NOW)},
+                {"id": "p2", "title": "Старьё", "at": util.iso(NOW - timedelta(days=40))},
+            ], "last_at": None})
+            store.save("queue.json", {"items": [
+                {"id": "q1", "title": "Xiaomi 18 Pro", "text": "<b>Текст</b>",
+                 "created_at": util.iso(NOW)}]})
+            memory = events.load(days=10)
+        titles = [e["title"] for e in memory["items"]]
+        self.assertEqual(titles, ["Alibaba показала ИИ-чип", "Xiaomi 18 Pro"])
+        self.assertTrue(memory["backfilled"])
+
+
+def _fake_grouping(system, user):
+    """Модель-заглушка: всё про Alibaba — одно событие, и оно «уже было», если есть в M."""
+    rows, memory_hit = [], None
+    for line in user.splitlines():
+        if line[:2].startswith("M") and line[1:2].isdigit() and "Alibaba" in line:
+            memory_hit = line.split(" ", 1)[0]
+    for line in user.splitlines():
+        if not (line.startswith("N") and line[1:2].isdigit()):
+            continue
+        n = int(line.split(" ", 1)[0][1:])
+        about_alibaba = "alibaba" in line.lower() or "阿里" in line
+        rows.append({"n": n, "group": "ali" if about_alibaba else f"g{n}",
+                     "seen": memory_hit if about_alibaba else None, "new_facts": False})
+    return {"items": rows}
+
+
+class TestCollectRemembersBatches(unittest.TestCase):
+    """Сценарий из жизни: Alibaba Zhenwu V900 пришла пятью карточками из разных изданий."""
+
+    def _run(self, raw):
+        from bot import collect
+
+        def fake_post(item, variant_hint="", **kw):
+            title = "Alibaba показала ИИ-чип" if "alibaba" in item.title.lower() or \
+                "阿里" in item.title else "Unitree открыла веса модели"
+            return {"publish": True, "score": 8, "title": title,
+                    "text": f"🧠 <b>{title}</b>\n\nТекст.", "tags": ["#ИИ"]}
+
+        env = {"TELEGRAM_BOT_TOKEN": "x", "MODERATOR_CHAT_ID": "1", "DEEPSEEK_API_KEY": "k"}
+        with mock.patch.dict("os.environ", env), \
+             mock.patch("bot.collect.collect_all", return_value=raw), \
+             mock.patch("bot.collect.write_post", side_effect=fake_post), \
+             mock.patch("bot.collect.ask_json", side_effect=_fake_grouping), \
+             mock.patch("bot.collect.media.pick_image_url", return_value=""), \
+             mock.patch("bot.collect.media.resolve", return_value=(None, "")), \
+             mock.patch("bot.collect.send_message", return_value={"message_id": 1}) as sm:
+            sent = collect.main(limit=5, force=True)
+        return sent, sm
+
+    def _item(self, i, source, title, lang="en"):
+        return Item(id=f"r{i}", title=title, summary="Chinese tech.",
+                    url=f"https://e.com/{source}/{i}", source_id=source, source_name=source,
+                    lang=lang, china_native=True, published=NOW)
+
+    def test_one_card_per_event_and_memory_between_batches(self):
+        from bot import store
+        with _TmpState():
+            store.save("queue.json", {"items": []})
+            store.save("published.json", {"items": [], "last_at": None})
+            first = [
+                self._item(1, "TechNode", "Alibaba unveils Zhenwu V900 AI chip with Huawei-class specs"),
+                self._item(2, "cnBeta", "阿里拟推超大模型 并发布新一代自研AI芯片", "zh"),
+                self._item(3, "Pandaily", "Unitree opens weights of robot model UnifoLM"),
+            ]
+            sent, sm = self._run(first)
+            self.assertEqual(sent, 2, "Alibaba — одна карточка, Unitree — вторая")
+
+            # следующая подборка: то же событие у третьего издания
+            second = [self._item(4, "SCMP Tech", "Alibaba chip Zhenwu V900 targets data centres")]
+            sent, sm = self._run(second)
+            self.assertEqual(sent, 0, "событие уже показывали — второй раз не присылаем")
+            sm.assert_not_called()
+
+            memory = store.load("events.json")
+            self.assertEqual(len(memory["items"]), 2)
+
+
+class TestPhotoCard(unittest.TestCase):
+    def test_long_head_does_not_cost_the_photo(self):
+        from bot import collect
+        item = Item(id="x1", title="t", summary="", url="https://e.com", source_id="s",
+                    source_name="TechNode")
+        post = "<b>Заголовок</b>\n\n" + "слово " * 160          # ~970 видимых символов
+        data = {"title": "Очень длинный заголовок для очереди модерации " * 2, "score": 8}
+        with mock.patch("bot.collect.send_photo", return_value={"message_id": 5}) as sp:
+            msg, is_photo, kind = collect._send_card(item, data, post, b"\xff\xd8", "source")
+        self.assertTrue(is_photo)
+        self.assertEqual(kind, "source")
+        caption = sp.call_args[0][2]
+        self.assertLessEqual(util.visible_len(caption), 1024)
+        self.assertTrue(caption.endswith(post))
+
+
+
+class TestCardLabel(unittest.TestCase):
+    def test_chinese_source_names_become_latin(self):
+        from bot import media
+        self.assertEqual(media.card_label("IT之家"), "ITHome")
+        self.assertEqual(media.card_label("Gizmochina"), "Gizmochina")
+        self.assertEqual(media.card_label("Неизвестный"), "Неизвестный")
+        self.assertEqual(media.card_label("新媒体X"), "X")
+
+    def test_prompt_rules(self):
+        from bot.llm import _system_prompt
+        prompt = _system_prompt()
+        self.assertIn("без китайского угла", prompt)
+        self.assertIn("Цифры из абзацев в ней не повторяй", prompt)
+
+
 class TestLanguageGuard(unittest.TestCase):
-    """Регрессия: пост на китайском или английском не должен доходить до канала."""
+    """Регрессия: непереведённый пост не должен доходить до канала."""
 
     def test_cyrillic_share(self):
         from bot.llm import cyrillic_share
@@ -387,13 +641,13 @@ class TestLanguageGuard(unittest.TestCase):
         resp = mock.Mock()
         resp.status_code = 200
         resp.json = lambda: {"choices": [{"message": {"content": json.dumps(body)}}]}
-        item = Item(id="1", title="SAIC", summary="s", url="https://e.com",
-                    source_id="s", source_name="36Kr", lang="zh")
+        item = types.SimpleNamespace(title="SAIC", summary="s", url="https://e.com",
+                                     source_name="36Kr", lang="zh", published=None)
         with mock.patch("bot.llm.requests.post", return_value=resp) as post:
             out = llm.write_post(item)
-        self.assertFalse(out["publish"], "непереведённый пост должен быть отклонён")
+        self.assertFalse(out["publish"])
         self.assertIn("не на русском", out["reason"])
-        self.assertEqual(post.call_count, 3, "одна попытка и два повтора")
+        self.assertEqual(post.call_count, 3)
 
 
 class TestPublishBlockReason(unittest.TestCase):
@@ -401,35 +655,25 @@ class TestPublishBlockReason(unittest.TestCase):
 
     def test_reasons(self):
         from bot import publish
-        now = NOW
+        from bot.util import iso
+        now = datetime.now(timezone.utc)
         with mock.patch.dict(publish.PUBLISHING,
                              {"timezone_offset": 3, "window_start": 9, "window_end": 22,
                               "min_gap_minutes": 30, "max_per_day": 12}):
             with mock.patch("bot.publish.local_now",
                             return_value=datetime(2026, 9, 27, 3, 0)):
-                self.assertEqual(publish.block_reason({"items": [], "last_at": None})[0],
-                                 "window")
+                self.assertEqual(
+                    publish.block_reason({"items": [], "last_at": None})[0], "window")
             with mock.patch("bot.publish.local_now",
                             return_value=datetime(2026, 9, 26, 14, 0)):
-                full = {"items": [{"at": util.iso(now)} for _ in range(12)],
-                        "last_at": util.iso(now - timedelta(hours=2))}
+                full = {"items": [{"at": iso(now)} for _ in range(12)],
+                        "last_at": iso(now - timedelta(hours=2))}
                 self.assertEqual(publish.block_reason(full)[0], "limit")
-                recent = {"items": [{"at": util.iso(now)}],
-                          "last_at": util.iso(now - timedelta(minutes=5))}
+                recent = {"items": [{"at": iso(now)}],
+                          "last_at": iso(now - timedelta(minutes=5))}
                 self.assertEqual(publish.block_reason(recent)[0], "gap")
-                free = {"items": [], "last_at": util.iso(now - timedelta(hours=3))}
+                free = {"items": [], "last_at": iso(now - timedelta(hours=3))}
                 self.assertIsNone(publish.block_reason(free)[0])
-
-
-class TestUtil(unittest.TestCase):
-    def test_similarity(self):
-        self.assertGreater(util.similarity("Huawei unveils 5nm chip",
-                                           "Huawei presents 5nm chip"), 0.55)
-        self.assertLess(util.similarity("BYD battery plant",
-                                        "Alibaba cloud earnings"), 0.3)
-
-    def test_chinese_titles_compare(self):
-        self.assertGreater(util.similarity("华为发布新款芯片", "华为发布新芯片"), 0.5)
 
 
 if __name__ == "__main__":
