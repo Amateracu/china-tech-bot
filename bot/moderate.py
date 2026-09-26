@@ -12,7 +12,7 @@ from .llm import render, write_post
 from .publish import publish_now
 from .tg_api import (CAPTION_LIMIT, answer_callback, edit_caption, edit_message,
                      get_updates, keyboard, send_message)
-from .util import esc, fit_html, now_utc, parse_iso, sanitize_html, visible_len
+from .util import esc, now_utc, parse_iso, truncate
 
 REWRITE_HINT = (
     "Предыдущий вариант поста не подошёл. Напиши заново: другой заголовок, "
@@ -35,7 +35,6 @@ class _Item:
         self.lang = entry.get("lang", "en")
         self.published = None
         self.url = entry.get("url", "")
-        self.followup_of = entry.get("followup_of", "")
 
 
 def _find(queue, item_id):
@@ -50,19 +49,13 @@ def _drop(queue, item_id):
 
 
 def _card_footer(entry, status):
-    limit = CAPTION_LIMIT if entry.get("mod_is_photo") else 3400
-    text = entry.get("text", "")
-    full = (
+    body = (
         f"<b>{esc(entry.get('title', ''))}</b>\n"
         f"<i>{esc(entry.get('source_name', ''))} · {status}</i>\n"
-        f"{'─' * 18}\n" + text
+        f"{'─' * 18}\n" + entry.get("text", "")
     )
-    if visible_len(full) <= limit:
-        return full
-    short = f"<i>{status}</i>\n{'─' * 12}\n" + text
-    if visible_len(short) <= limit:
-        return short
-    return fit_html(short, limit)
+    limit = CAPTION_LIMIT if entry.get("mod_is_photo") else 3400
+    return truncate(body, limit)
 
 
 def _ack(callback_id, text=""):
@@ -135,12 +128,8 @@ def handle_callback(cb, queue, approved):
             _ack(cb["id"], "Лимит переписываний исчерпан")
             return
         _ack(cb["id"], "Переписываю…")
-        hint = REWRITE_HINT
-        if entry.get("followup_of"):
-            from .collect import FOLLOWUP_HINT
-            hint += " " + FOLLOWUP_HINT.format(title=entry["followup_of"])
         try:
-            fresh = write_post(_Item(entry), variant_hint=hint, temperature=0.9)
+            fresh = write_post(_Item(entry), variant_hint=REWRITE_HINT, temperature=0.9)
         except RuntimeError as exc:
             _edit(entry, chat_id, message_id,
                   _card_footer(entry, f"⚠️ {esc(str(exc))[:60]}"),
@@ -172,6 +161,7 @@ def handle_callback(cb, queue, approved):
 
 SOURCE_MARK = '\n\n<a href="'
 EDIT_TTL_MINUTES = 30
+ALLOWED_TAGS = ("b", "i", "u", "s", "code")
 
 
 def split_body(text: str):
@@ -183,8 +173,11 @@ def split_body(text: str):
 
 
 def sanitize(text: str) -> str:
-    """Экранируем всё, кроме тегов оформления Telegram — иначе пост отвергнут."""
-    return sanitize_html(text)
+    """Экранируем всё, кроме простых тегов оформления — иначе Telegram отвергнет пост."""
+    out = esc(text)
+    for tag in ALLOWED_TAGS:
+        out = out.replace(f"&lt;{tag}&gt;", f"<{tag}>").replace(f"&lt;/{tag}&gt;", f"</{tag}>")
+    return out
 
 
 def start_edit(entry, chat_id, message_id):
@@ -310,11 +303,16 @@ def handle_message(msg, queue, approved):
         _fetch_news(chat_id, queue)
     elif text in QUEUE_WORDS or low.startswith("/queue"):
         published = store.load("published.json")
+        from .publish import block_reason, today_count
+        code, human = block_reason(published)
+        status = f"следующий пост скоро" if not code else f"⏸ {human}"
         send_message(
             chat_id,
             f"На модерации: <b>{len(queue['items'])}</b>\n"
             f"Одобрено, ждёт слота: <b>{len(approved['items'])}</b>\n"
-            f"Опубликовано всего: <b>{len(published['items'])}</b>",
+            f"Опубликовано сегодня: <b>{today_count(published)}</b> "
+            f"(всего {len(published['items'])})\n"
+            f"{status}",
             reply_markup=MENU,
         )
     elif text in NEXT_WORDS or low.startswith("/next"):

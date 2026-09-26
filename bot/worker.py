@@ -100,18 +100,40 @@ def pump_telegram() -> bool:
     return True
 
 
+def _warn_blocked(code, human, waiting):
+    """Один раз сообщаем, что очередь встала надолго: окно закрылось или лимит."""
+    from .config import MODERATOR_CHAT_ID
+    from .tg_api import send_message
+
+    state = store.load("worker.json")
+    if state.get("block_code") == code:
+        return
+    state["block_code"] = code
+    store.save("worker.json", state)
+    if code not in ("window", "limit") or not MODERATOR_CHAT_ID:
+        return
+    try:
+        send_message(MODERATOR_CHAT_ID,
+                     f"⏸ Очередь стоит: {human}.\n"
+                     f"Ждут публикации: {waiting}. "
+                     f"Кнопка «⏭ Опубликовать» отправит следующий пост сразу.")
+    except RuntimeError as exc:
+        log(f"  предупредить не вышло: {str(exc)[:70]}")
+
+
 def publish_due() -> bool:
     """Публикует один одобренный пост, если совпали окно, интервал и лимит."""
-    from .publish import gap_ok, in_window, publish_now, today_count
+    from .publish import block_reason, publish_now
 
     approved = store.load("approved.json")
     if not approved["items"]:
         return False
     published = store.load("published.json")
-    if not (in_window() and gap_ok(published)):
+    code, human = block_reason(published)
+    if code:
+        _warn_blocked(code, human, len(approved["items"]))
         return False
-    if today_count(published) >= int(PUBLISHING.get("max_per_day", 6)):
-        return False
+    _warn_blocked(None, "", 0)
 
     post = approved["items"].pop(0)
     try:

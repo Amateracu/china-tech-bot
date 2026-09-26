@@ -42,8 +42,7 @@ def _user_prompt(item, variant_hint: str = "") -> str:
     return "\n".join(p for p in parts if p)
 
 
-def _call(messages: list, temperature: float, timeout: int = 90,
-          max_tokens: int = 1200) -> dict:
+def _call(messages: list, temperature: float, timeout: int = 90) -> dict:
     resp = requests.post(
         f"{DEEPSEEK_BASE_URL}/chat/completions",
         headers={
@@ -54,7 +53,7 @@ def _call(messages: list, temperature: float, timeout: int = 90,
             "model": DEEPSEEK_MODEL,
             "messages": messages,
             "temperature": temperature,
-            "max_tokens": max_tokens,
+            "max_tokens": 1200,
             "response_format": {"type": "json_object"},
         },
         timeout=timeout,
@@ -63,6 +62,23 @@ def _call(messages: list, temperature: float, timeout: int = 90,
         raise RuntimeError(f"DeepSeek {resp.status_code}: {resp.text[:300]}")
     content = resp.json()["choices"][0]["message"]["content"]
     return json.loads(content)
+
+
+RU_MIN_SHARE = 0.55
+RETRY_RU = (
+    "ВАЖНО: предыдущий ответ был не на русском. Весь текст поста и заголовок "
+    "должны быть на русском языке. Китайские и английские слова допустимы только "
+    "как названия компаний и продуктов."
+)
+
+
+def cyrillic_share(text: str) -> float:
+    """Доля кириллицы среди букв. Ловим случаи, когда модель не перевела текст."""
+    letters = [c for c in (text or "") if c.isalpha()]
+    if not letters:
+        return 0.0
+    cyr = sum(1 for c in letters if "\u0400" <= c <= "\u04ff")
+    return cyr / len(letters)
 
 
 def write_post(item, variant_hint: str = "", temperature: float = 0.6, retries: int = 2) -> dict:
@@ -83,6 +99,20 @@ def write_post(item, variant_hint: str = "", temperature: float = 0.6, retries: 
             if data["publish"] and not data["text"]:
                 data["publish"] = False
                 data["reason"] = "модель вернула пустой текст"
+            if data["publish"]:
+                share = cyrillic_share(data["text"])
+                if share < RU_MIN_SHARE:
+                    if attempt < retries:
+                        # ещё одна попытка с прямым указанием на язык
+                        messages[-1] = {
+                            "role": "user",
+                            "content": _user_prompt(item, variant_hint) + "\n\n" + RETRY_RU,
+                        }
+                        continue
+                    data["publish"] = False
+                    data["reason"] = (
+                        f"текст не на русском (кириллицы {share:.0%})"
+                    )
             return data
         except (requests.RequestException, json.JSONDecodeError, KeyError, RuntimeError) as exc:
             last_error = exc
@@ -91,29 +121,12 @@ def write_post(item, variant_hint: str = "", temperature: float = 0.6, retries: 
     raise RuntimeError(f"DeepSeek не ответил: {last_error}")
 
 
-def ask_json(system: str, user: str, temperature: float = 0.1,
-             max_tokens: int = 2500, retries: int = 1) -> dict:
-    """Произвольный запрос к модели с ответом в JSON — для служебных задач вроде дедупа."""
-    messages = [{"role": "system", "content": system}, {"role": "user", "content": user}]
-    last_error = None
-    for attempt in range(retries + 1):
-        try:
-            return _call(messages, temperature, timeout=120, max_tokens=max_tokens)
-        except (requests.RequestException, json.JSONDecodeError, KeyError, RuntimeError) as exc:
-            last_error = exc
-            if attempt < retries:
-                time.sleep(3)
-    raise RuntimeError(f"DeepSeek не ответил: {last_error}")
-
-
 def render(data: dict, item_url: str, source_name: str) -> str:
     """Собирает финальный текст поста: тело + хэштеги + ссылка на источник."""
     from .config import CHANNEL as ch
-    from .util import esc, sanitize_html
+    from .util import esc
 
-    # разметку пишет модель — чистим, иначе один незакрытый тег и Telegram
-    # отвергнет пост целиком
-    text = sanitize_html(data["text"].strip(), drop_unknown=True).strip()
+    text = data["text"].strip()
     tags = [t if t.startswith("#") else f"#{t}" for t in (data.get("tags") or [])]
     if tags and not any(t in text for t in tags):
         text = f"{text}\n\n{' '.join(tags)}"

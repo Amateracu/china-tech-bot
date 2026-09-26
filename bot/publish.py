@@ -10,7 +10,7 @@ from datetime import timedelta
 from . import media, store
 from .config import CHANNEL_ID, DRY_RUN, PUBLISHING, require
 from .tg_api import CAPTION_LIMIT, send_message, send_photo
-from .util import iso, local_now, now_utc, parse_iso, visible_len
+from .util import iso, local_now, now_utc, parse_iso
 
 
 def log(*args):
@@ -25,7 +25,7 @@ def publish_now(post: dict) -> dict:
             post.get("title", ""), post.get("image_url", ""),
             post.get("url", ""), post.get("source_name", ""),
         )
-    if blob and visible_len(post["text"]) <= CAPTION_LIMIT:
+    if blob and len(post["text"]) <= CAPTION_LIMIT:
         msg = send_photo(CHANNEL_ID, blob, post["text"], silent=False)
     else:
         msg = send_message(
@@ -71,6 +71,31 @@ def today_count(published: dict) -> int:
         if at and (at + timedelta(hours=offset)).date() == today:
             count += 1
     return count
+
+
+def block_reason(published=None):
+    """Почему одобренное сейчас не уходит в канал. None — препятствий нет.
+
+    Возвращает (код, человеческий текст). Код нужен, чтобы не спамить
+    уведомлениями об одном и том же состоянии.
+    """
+    published = published or store.load("published.json")
+    offset = int(PUBLISHING.get("timezone_offset", 3))
+
+    if not in_window():
+        return ("window", f"вне окна публикации — посты уходят с "
+                          f"{PUBLISHING.get('window_start', 9)}:00 до "
+                          f"{PUBLISHING.get('window_end', 22)}:00")
+    limit = int(PUBLISHING.get("max_per_day", 6))
+    done = today_count(published)
+    if done >= limit:
+        return ("limit", f"дневной лимит исчерпан: {done} из {limit}")
+    if not gap_ok(published):
+        last = parse_iso(published.get("last_at") or "")
+        gap = int(PUBLISHING.get("min_gap_minutes", 30))
+        nxt = (last + timedelta(minutes=gap, hours=offset)).strftime("%H:%M")
+        return ("gap", f"интервал между постами, следующий слот в {nxt}")
+    return (None, "")
 
 
 def main() -> int:
