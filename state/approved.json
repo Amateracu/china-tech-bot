@@ -1,3 +1,42 @@
 {
- "items": []
+ "items": [
+  {
+   "id": "01f55f577fd9",
+   "title": "Amicro Technology выходит на IPO в Гонконге на $100 млн",
+   "text": "🔲 <b>Китайский разработчик чипов для роботов от Xiaomi идёт на IPO в Гонконге — больше $100 млн</b>\n\nZhuhai Amicro Technology, в которую вложилась Xiaomi, готовится начать предмаркетинг гонконгского размещения уже на этой неделе. Сумма — <b>свыше $100 млн</b>. На прошлой неделе компания прошла слушания у оператора биржи <b>HKEX</b>, то есть сняла последний регуляторный барьер перед продажей акций.\n\n<blockquote>💬 Показательно: деньги на биржу несёт не разработчик человекоподобных роботов, а тот, кто делает для них чипы. Пока все спорят, чей гуманоид красивее ходит, прибыль собираются делать на компонентах — как Nvidia на волне ИИ.</blockquote>\n\n#чипы #Xiaomi\n\n<a href=\"https://www.scmp.com/business/china-business/article/3369017/xiaomi-backed-robotics-chip-designer-clears-hearing-eyes-us100m-hong-kong-ipo-sources\">Источник: SCMP Tech</a>",
+   "url": "https://www.scmp.com/business/china-business/article/3369017/xiaomi-backed-robotics-chip-designer-clears-hearing-eyes-us100m-hong-kong-ipo-sources",
+   "source_name": "SCMP Tech",
+   "source_id": "scmp_tech",
+   "llm_score": 7,
+   "raw_title": "Xiaomi-backed robotics chip designer clears hearing, eyes US$100m Hong Kong IPO: sources",
+   "raw_summary": "Zhuhai Amicro Technology, a Xiaomi-backed chipmaker, is preparing to begin premarketing for a Hong Kong initial public offering (IPO) of more than US$100 million as early as this week, according to people familiar with the matter. The company passed its listing hearing with bourse operator Hong Kong Exchanges and Clearing (HKEX) last week, clearing the final regulatory hurdle for a share sale in the city, the people said, requesting anonymity because the information is private. According to...",
+   "lang": "en",
+   "image_url": "https://cdn.i-scmp.com/sites/default/files/styles/1280x720/public/d8/images/canvas/2026/09/28/70a3cc59-b561-4ab2-a5c5-a1d9ad5ca7dd_0c35d8d6.jpg?itok=D3M6G8Id&v=1790572447",
+   "media_kind": "source",
+   "mod_is_photo": true,
+   "message_id": 188,
+   "created_at": "2026-09-28T05:36:21.685245+00:00",
+   "rewrites": 0,
+   "followup_of": ""
+  },
+  {
+   "id": "a7845108f285",
+   "title": "В Китае показали робота на полностью локальной электронной архитектуре",
+   "text": "🤖 <b>В Китае показали робота с полностью своей электронной архитектурой — от ОС до ИИ-чипов</b>\n\nПрезентация прошла <b>28 сентября</b> в Ичжане, провинция Хубэй. Под «электронной архитектурой» здесь понимают операционную систему, сети, инструментальные программы и чипы для ИИ-вычислений — то есть всю управляющую начинку робота, а не железо суставов.\n\n📅 Заявленная цель — дать отрасли вариант, который <b>полностью заменяет зарубежные решения</b>. Тесты проводил Государственный центр промышленной информационной безопасности: при разрушении суставов, сетевых атаках и внедрении вирусов обычные роботы теряли связь, мгновенно выключались или выходили из-под контроля, а этот продолжил безопасную работу.\n\n<blockquote expandable>▫️ Разделение контуров управления и ИИ-вычислений\n▫️ Проверка на разрушение суставов, атаки и вирусы\n▫️ Задача — «суверенная безопасность» отрасли роботов</blockquote>\n\n<blockquote>💬 Смысл тут не в самом роботе, а в попытке убрать зависимость от чужих чипов и ОС в управляющем контуре. Пока это заявка и демонстрация, а не серийный продукт, — но именно такие вещи решают, чьи платформы будут под капотом у роботов через несколько лет.</blockquote>\n\n#роботы #Китай\n\n<a href=\"https://www.ithome.com/1/007/678.htm\">Источник: IT之家</a>",
+   "url": "https://www.ithome.com/1/007/678.htm",
+   "source_name": "IT之家",
+   "source_id": "ithome",
+   "llm_score": 7,
+   "raw_title": "全球首台搭载全国产化电子架构的具身智能机器人亮相，提供可完整替代国外方案技术选项",
+   "raw_summary": "IT之家 9 月 28 日消息，据央视新闻报道，国产化电子架构具身智能机器人发布会于今日（9 月 28 日）在湖北宜昌举行， 全球首台搭载全国产化电子架构的具身智能机器人正式亮相 。 电子架构是决定整机性能上限的“智能神经系统”，包括操作系统、网络、工具软件和 AI 计算芯片。专家介绍，如果把机器人看作一个“人”，那么电子架构就是它的神经系统 —— 大脑思考得再周密，没有神经系统，行动就无从发生。 据介绍，这套国产化电子架构可以实现控制与 AI 智能计算的隔离融合，构建从 AI 决策到物理执行的全国产化技术底座， 提供可完整替代国外方案的技术选项 。 国家工业信息安全发展研究中心测试人员对机器人开展技术验证，在关节破坏、网络攻击、病毒植入等情况下，传统电子架构机器人出现线路失效、瞬间关机、系统失控等情况，而 全国产化电子架构机器人通过了严苛安全测试，并保持安全运行能力，展现了全国产化电子架构的实时控制、快速响应、故障隔离、防攻击与系统安全能力 。 报道称，全国产化电子架构保障机器人的内生安全和产业主权安全，为机器人自主行为划定刚性安全边界，确保其不破坏生产、不危及人员安全，让人工智能在物理世界安全、可信、可控，构建驾驭物理 AI 的安全驾驭系统（Harness），充分实现智能机器人行业的主权安全。 近年来，国产机器人底层技术在加快形成产业协同。从零部件单点突破，到软硬件系统融合，再到全产业链生态共建，我国机器人底层技术实现质的跃迁。",
+   "lang": "zh",
+   "image_url": "https://img.ithome.com/newsuploadfiles/2026/9/8617bb85-feb9-4368-891a-15a7d5df802b.jpg?x-bce-process=image/format,f_auto",
+   "media_kind": "",
+   "mod_is_photo": false,
+   "message_id": 189,
+   "created_at": "2026-09-28T05:36:26.711469+00:00",
+   "rewrites": 0,
+   "followup_of": ""
+  }
+ ]
 }
