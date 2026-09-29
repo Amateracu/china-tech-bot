@@ -1,25 +1,6 @@
 {
  "items": [
   {
-   "id": "5ef9678900dd",
-   "title": "VSMC — СП TSMC и NXP — планирует вторую фабрику в Сингапуре",
-   "text": "<b>🔲 СП TSMC и NXP задумалось о второй фабрике в Сингапуре — спрос перевесил осторожность</b>\n\nСовместное предприятие <b>VisionPower Semiconductor Manufacturing</b> (VSMC) — его создали тайваньская Vanguard International, связанная с TSMC, и нидерландская <b>NXP</b> — рассматривает строительство второго завода в Сингапуре. Причина — растущий спрос на выпускаемую продукцию.\n\n<blockquote>💬 Пока все следят за передовыми техпроцессами, деньги делаются на зрелых чипах для автомобилей и промышленности. VSMC — как раз про этот сегмент, и расширение в Сингапуре показывает: дефицит там никуда не делся.</blockquote>\n\n#чипы #TSMC\n\n<a href=\"https://www.cnbeta.com.tw/articles/tech/1579906.htm\">Источник: cnBeta</a>",
-   "url": "https://www.cnbeta.com.tw/articles/tech/1579906.htm",
-   "source_name": "cnBeta",
-   "source_id": "cnbeta",
-   "llm_score": 7,
-   "raw_title": "台积电关联公司计划修建第二座新加坡芯片工厂",
-   "raw_summary": "为满足不断增长的需求，台积电关联公司世界先进与荷兰公司恩智浦半导体的合资企业VisionPower Semiconductor Manufacturing Co．（简称VSMC）正在考虑修建第二座新加坡芯片厂。 阅读全文",
-   "lang": "zh",
-   "image_url": "https://static.cnbetacdn.com/thumb/article/2021/0805/05e441c353b18a1.jpg",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 199,
-   "created_at": "2026-09-28T18:41:25.260765+00:00",
-   "rewrites": 0,
-   "followup_of": ""
-  },
-  {
    "id": "237a095eb366",
    "title": "HarmonyOS перевалила за 90 млн устройств, до цели 100 млн осталось немного",
    "text": "📱 <b>HarmonyOS перевалила за 90 млн устройств — до заявленной сотни осталось чуть-чуть</b>\n\nПо данным стороннего сервиса Qimiaogongjuzhixiang, установленная база HarmonyOS достигла <b>90,03 млн</b> устройств. Ещё 18 августа было 80,1 млн — то есть примерно <b>993 тыс. за месяц с небольшим</b>.\n\n📅 Ещё в марте Юй Чэндун обещал, что до зимы число пользователей системы перевалит за <b>100 млн</b>. Тогда на HarmonyOS 5 и 6 приходилось около 47 млн устройств.\n\n<blockquote>💬 Цифра неофициальная: сервис считает по загрузкам из AppGallery, так что с данными Huawei могут расходиться. Но темп важен сам по себе — в Китае HarmonyOS уже не экзотика, а вторая по массовости система после Android.</blockquote>\n\n#гаджеты #Huawei\n\n<a href=\"https://www.ithome.com/1/008/280.htm\">Источник: IT之家</a>",
