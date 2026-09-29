@@ -1,25 +1,6 @@
 {
  "items": [
   {
-   "id": "902813dbda90",
-   "title": "Tencent выпустил нативное приложение Yuanbao для HarmonyOS на Hunyuan Hy4",
-   "text": "<b>🧠 Tencent выпустил Yuanbao нативно для HarmonyOS — и сразу на новой модели Hunyuan Hy4</b>\n\n25 сентября Tencent выкатил версию своего ИИ-ассистента Yuanbao, написанную нативно под <b>HarmonyOS</b>, а не через прослойку совместимости. Работает она на предварительной версии модели <b>Hunyuan Hy4</b> — не на прошлогодней Image 3.5, как можно было ожидать.\n\n<blockquote expandable>▫️ Expert mode — режим с усиленным «размышлением» над запросом\n▫️ Глубокое чтение документов\n▫️ Поиск внутри экосистемы WeChat\n</blockquote>\n\n<blockquote>💬 Нативная сборка под HarmonyOS — это сигнал, что Tencent всерьёз ставит на платформу Huawei, а не держит её как запасной вариант. И то, что флагманский ассистент дебютирует сразу на свежей модели, а не на проверенной старой, — редкий для Tencent ход: обычно они сначала обкатывают новинку на массовой аудитории.</blockquote>\n\n#ИИ #Tencent\n\n<a href=\"https://pandaily.com/tencent-yuanbao-native-harmonyos-hunyuan-hy4-preview\">Источник: Pandaily</a>",
-   "url": "https://pandaily.com/tencent-yuanbao-native-harmonyos-hunyuan-hy4-preview",
-   "source_name": "Pandaily",
-   "source_id": "pandaily",
-   "llm_score": 7,
-   "raw_title": "Tencent Yuanbao Native HarmonyOS App Ships With Hunyuan Hy4 Preview",
-   "raw_summary": "Tencent launched a native HarmonyOS Yuanbao app on September 25, 2026, powered by Hunyuan Hy4 preview with Expert mode, document deep-read and WeChat ecosystem search—not an Image 3.5 lead.",
-   "lang": "en",
-   "image_url": "https://cms-image.pandaily.com/1/tencent_yuanbao_harmonyos_hy4_8996c125f3.png",
-   "media_kind": "source",
-   "mod_is_photo": true,
-   "message_id": 197,
-   "created_at": "2026-09-28T18:41:16.828681+00:00",
-   "rewrites": 0,
-   "followup_of": ""
-  },
-  {
    "id": "cf4742564845",
    "title": "Huawei и China Telecom развернули в Шанхае 3400+ базовых станций 5G-A 3CC",
    "text": "🔲 <b>Huawei и Shanghai Telecom развернули в Шанхае больше 3400 базовых станций 5G-A — почти 4 Гбит/с на загрузку</b>\n\nСтанции работают в диапазонах <b>2,1 ГГц и 3,5 ГГц</b> с агрегацией трёх несущих (3CC) и технологией большого аплинка: пиковая скорость — <b>1 Гбит/с</b> вверх и почти <b>4 Гбит/с</b> вниз. В ключевых районах центра города уже обеспечена непрерывная отдача 20 Мбит/с, а Shanghai Telecom обещает покрыть весь центр Шанхая к концу 2026 года.\n\n<blockquote expandable>▫️ VIP-абонентам — до 3 Гбит/с вниз и 500 Мбит/с вверх с повышенным приоритетом в планировщике\n▫️ Отдельный тариф на «экстремальный» опыт у базовой станции: у VIP скорость вдвое выше обычной, без ущерба для остальных\n▫️ Сценарий 500 Мбит/с на отдачу тестировали на стадионе, в Юйюане и на Вайтане\n▫️ В Хуанпу тестируют динамические слайсы под голосовые вызовы и видеоконференции\n▫️ На круизных лайнерах и в музеях — AI-очки с синхронным переводом</blockquote>\n\n<blockquote>💬 Китайцы продают 5G-A не как «ещё быстрее в телефон», а как приоритет: за деньги вы получаете не только скорость, но и место в очереди к сети. Операторская логика, которую у нас пока обсуждают только в теории.</blockquote>\n\n#чипы #Huawei\n\n<a href=\"https://www.ithome.com/1/008/049.htm\">Источник: IT之家</a>",
